@@ -311,6 +311,89 @@ export function useFundDashboard() {
     }
   };
 
+  const handleApproveSingleTransaction = async (txId: string, participantName: string, amount: number) => {
+    // Local Optimistic Update
+    setTransactions(prev =>
+      prev.map(tx => (tx.id === txId ? { ...tx, status: 'Completed' } : tx))
+    );
+
+    const targetUser = users.find(u => u.name === participantName);
+    if (targetUser) {
+      setUsers(prev =>
+        prev.map(u =>
+          u.id === targetUser.id
+            ? {
+                ...u,
+                deposited: u.deposited + amount,
+                pending: Math.max(0, u.pending - amount),
+              }
+            : u
+        )
+      );
+
+      setFundTotal(prev => prev + amount);
+
+      try {
+        await supabase
+          .from('profiles')
+          .update({
+            deposited: Number(targetUser.deposited) + amount,
+            pending: Math.max(0, Number(targetUser.pending) - amount),
+          })
+          .eq('id', targetUser.id);
+      } catch (err) {
+        console.warn('Profile approval sync notice:', err);
+      }
+    }
+
+    try {
+      await supabase
+        .from('transactions')
+        .update({ status: 'Completed' })
+        .eq('id', txId);
+    } catch (err) {
+      console.warn('Transaction approval sync notice:', err);
+    }
+  };
+
+  const handleRejectSingleTransaction = async (txId: string, participantName: string, amount: number) => {
+    // Local Optimistic Update
+    setTransactions(prev =>
+      prev.map(tx => (tx.id === txId ? { ...tx, status: 'Cancelled' } : tx))
+    );
+
+    const targetUser = users.find(u => u.name === participantName);
+    if (targetUser) {
+      setUsers(prev =>
+        prev.map(u =>
+          u.id === targetUser.id
+            ? { ...u, pending: Math.max(0, u.pending - amount) }
+            : u
+        )
+      );
+
+      try {
+        await supabase
+          .from('profiles')
+          .update({
+            pending: Math.max(0, Number(targetUser.pending) - amount),
+          })
+          .eq('id', targetUser.id);
+      } catch (err) {
+        console.warn('Profile rejection sync notice:', err);
+      }
+    }
+
+    try {
+      await supabase
+        .from('transactions')
+        .update({ status: 'Cancelled' })
+        .eq('id', txId);
+    } catch (err) {
+      console.warn('Transaction rejection sync notice:', err);
+    }
+  };
+
   const handleUpdateFundValue = async (e: FormEvent) => {
     e.preventDefault();
     const val = parseFloat(newValuationInput);
@@ -395,6 +478,8 @@ export function useFundDashboard() {
     isSupabaseLive,
     handleUserDeposit,
     handleApproveDeposit,
+    handleApproveSingleTransaction,
+    handleRejectSingleTransaction,
     handleUpdateFundValue,
     handleDeclareDividend,
   };

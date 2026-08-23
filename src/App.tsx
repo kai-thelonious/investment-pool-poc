@@ -38,6 +38,8 @@ export default function App() {
     isSupabaseLive,
     handleUserDeposit,
     handleApproveDeposit,
+    handleApproveSingleTransaction,
+    handleRejectSingleTransaction,
     handleUpdateFundValue,
     handleDeclareDividend,
   } = useFundDashboard();
@@ -98,6 +100,8 @@ export default function App() {
                         portfolio={portfolio}
                         totalPendingDeposits={totalPendingDeposits}
                         handleApproveDeposit={handleApproveDeposit}
+                        handleApproveSingleTransaction={handleApproveSingleTransaction}
+                        handleRejectSingleTransaction={handleRejectSingleTransaction}
                         newValuationInput={newValuationInput}
                         setNewValuationInput={setNewValuationInput}
                         handleUpdateFundValue={handleUpdateFundValue}

@@ -6,6 +6,8 @@ interface AdminPageProps {
   portfolio: PortfolioItem[];
   totalPendingDeposits: number;
   handleApproveDeposit: () => void;
+  handleApproveSingleTransaction: (txId: string, participantName: string, amount: number) => void;
+  handleRejectSingleTransaction: (txId: string, participantName: string, amount: number) => void;
   newValuationInput: string;
   setNewValuationInput: (val: string) => void;
   handleUpdateFundValue: (e: FormEvent) => void;
@@ -24,6 +26,8 @@ export default function AdminPage({
   portfolio,
   totalPendingDeposits,
   handleApproveDeposit,
+  handleApproveSingleTransaction,
+  handleRejectSingleTransaction,
   newValuationInput,
   setNewValuationInput,
   handleUpdateFundValue,
@@ -42,6 +46,8 @@ export default function AdminPage({
       portfolio={portfolio}
       totalPendingDeposits={totalPendingDeposits}
       handleApproveDeposit={handleApproveDeposit}
+      handleApproveSingleTransaction={handleApproveSingleTransaction}
+      handleRejectSingleTransaction={handleRejectSingleTransaction}
       newValuationInput={newValuationInput}
       setNewValuationInput={setNewValuationInput}
       handleUpdateFundValue={handleUpdateFundValue}

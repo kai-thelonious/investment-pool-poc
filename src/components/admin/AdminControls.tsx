@@ -1,11 +1,13 @@
 import { FormEvent } from 'react';
-import { ShieldCheck, TrendingUp, DollarSign, Award } from 'lucide-react';
+import { ShieldCheck, TrendingUp, DollarSign, Award, Check, X } from 'lucide-react';
 import { kamiTheme } from '../../constants/theme';
 import { TransactionItem } from '../../data/mockData';
 
 interface AdminControlsProps {
   totalPendingDeposits: number;
   handleApproveDeposit: () => void;
+  handleApproveSingleTransaction: (txId: string, participantName: string, amount: number) => void;
+  handleRejectSingleTransaction: (txId: string, participantName: string, amount: number) => void;
   newValuationInput: string;
   setNewValuationInput: (value: string) => void;
   handleUpdateFundValue: (e: FormEvent) => void;
@@ -23,6 +25,8 @@ interface AdminControlsProps {
 export default function AdminControls({
   totalPendingDeposits,
   handleApproveDeposit,
+  handleApproveSingleTransaction,
+  handleRejectSingleTransaction,
   newValuationInput,
   setNewValuationInput,
   handleUpdateFundValue,
@@ -75,26 +79,45 @@ export default function AdminControls({
           Review and approve incoming LP subscription requests.
         </p>
 
-        {totalPendingDeposits > 0 ? (
+        {pendingTx.length > 0 ? (
           <div className="font-sans space-y-3">
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
               {pendingTx.map((tx) => (
-                <div key={tx.id} className="p-2.5 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg flex items-center justify-between text-xs">
-                  <div>
-                    <span className="font-medium text-[#141413] block">{tx.user}</span>
-                    <span className="text-[10px] text-[#6B6A64] font-mono">{tx.id} • {tx.date}</span>
+                <div key={tx.id} className="p-3 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg flex items-center justify-between gap-2 text-xs">
+                  <div className="truncate">
+                    <span className="font-semibold text-[#141413] block truncate">{tx.user}</span>
+                    <span className="text-[10px] text-[#6B6A64] font-mono block">{tx.id} • {tx.date}</span>
+                    <span className="font-bold text-[#1B365D] block mt-0.5">${tx.amount.toLocaleString()}</span>
                   </div>
-                  <span className="font-bold text-[#1B365D]">${tx.amount.toLocaleString()}</span>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => handleApproveSingleTransaction(tx.id, tx.user, tx.amount)}
+                      title="Approve & Mint Shares"
+                      className="p-1.5 bg-[#1B365D] hover:bg-[#2D5A8A] text-white rounded transition-colors"
+                    >
+                      <Check size={14} />
+                    </button>
+                    <button
+                      onClick={() => handleRejectSingleTransaction(tx.id, tx.user, tx.amount)}
+                      title="Reject Subscription Request"
+                      className="p-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded transition-colors"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <button
-              onClick={handleApproveDeposit}
-              className={`w-full ${kamiTheme.accentInk} ${kamiTheme.accentInkHover} text-white text-xs font-semibold tracking-wider uppercase py-3 rounded-lg transition-all shadow-sm`}
-            >
-              Approve All (${totalPendingDeposits.toLocaleString()}) & Mint Shares
-            </button>
+            {pendingTx.length > 1 && (
+              <button
+                onClick={handleApproveDeposit}
+                className={`w-full ${kamiTheme.accentInk} ${kamiTheme.accentInkHover} text-white text-xs font-semibold tracking-wider uppercase py-2.5 rounded-lg transition-all shadow-sm mt-2`}
+              >
+                Approve All (${totalPendingDeposits.toLocaleString()})
+              </button>
+            )}
           </div>
         ) : (
           <div className="p-4 rounded-lg bg-[#FAF9F5] border border-[#E8E6DC] text-center text-xs font-sans text-[#6B6A64]">
