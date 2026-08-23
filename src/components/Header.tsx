@@ -50,20 +50,32 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
             <span>{isSupabaseLive ? 'Supabase Live' : 'Mock Fallback'}</span>
           </div>
 
-          <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC]">
-            <Users size={13} className="text-[#1B365D] shrink-0" />
-            <select
-              value={activeUserId}
-              onChange={(e) => setActiveUserId(e.target.value)}
-              className="bg-transparent text-[11px] sm:text-xs font-semibold text-[#141413] focus:outline-none cursor-pointer w-full"
-            >
-              {users.map(u => (
-                <option key={u.id} value={u.id}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          {profile ? (
+            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC] text-[11px] sm:text-xs">
+              <Users size={13} className="text-[#1B365D] shrink-0" />
+              <span className="font-semibold text-[#141413]">{profile.name}</span>
+              <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                profile.role === 'admin' ? 'bg-[#1B365D] text-white' : 'bg-gray-200 text-gray-700'
+              }`}>
+                {profile.role === 'admin' ? 'GP' : 'LP'}
+              </span>
+            </div>
+          ) : (
+            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC]">
+              <Users size={13} className="text-[#1B365D] shrink-0" />
+              <select
+                value={activeUserId}
+                onChange={(e) => setActiveUserId(e.target.value)}
+                className="bg-transparent text-[11px] sm:text-xs font-semibold text-[#141413] focus:outline-none cursor-pointer w-full"
+              >
+                {users.map(u => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         {/* ROUTER NAVIGATION TAB GROUP */}
@@ -81,18 +93,20 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
           >
             <User size={13} /> Investor
           </NavLink>
-          <NavLink
-            to="/admin"
-            className={({ isActive }) =>
-              `flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded text-[11px] sm:text-xs font-semibold tracking-wide transition-all whitespace-nowrap flex-1 xs:flex-none ${
-                isActive
-                  ? 'bg-[#1B365D] text-white shadow-sm'
-                  : 'text-[#6B6A64] hover:text-[#141413]'
-              }`
-            }
-          >
-            <Shield size={13} /> Partner
-          </NavLink>
+          {(profile?.role === 'admin' || !profile) && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded text-[11px] sm:text-xs font-semibold tracking-wide transition-all whitespace-nowrap flex-1 xs:flex-none ${
+                  isActive
+                    ? 'bg-[#1B365D] text-white shadow-sm'
+                    : 'text-[#6B6A64] hover:text-[#141413]'
+                }`
+              }
+            >
+              <Shield size={13} /> Partner
+            </NavLink>
+          )}
           <NavLink
             to="/ledger"
             className={({ isActive }) =>

@@ -29,17 +29,18 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     }
 
     // 3. Check role authorization if restricted (e.g. /admin)
-    if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
+    const userRole = profile?.role || 'investor';
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
         return (
             <div className={`min-h-screen ${kamiTheme.bgPage} flex items-center justify-center p-6 font-serif antialiased`}>
-                <div className={`max-w-md ${kamiTheme.cardBg} p-8 rounded-xl border ${kamiTheme.cardBorder} text-center space-y-4`}>
+                <div className={`max-w-md ${kamiTheme.cardBg} p-8 rounded-xl border ${kamiTheme.cardBorder} text-center space-y-4 shadow-lg`}>
                     <h2 className="text-2xl font-normal text-red-800">Access Restricted</h2>
                     <p className="text-xs font-sans text-gray-600">
-                        Your account role (<strong>{profile.role}</strong>) does not have General Partner authorization to access this area.
+                        Your account role (<strong>{userRole}</strong>) does not have General Partner authorization to access this area.
                     </p>
                     <button
                         onClick={() => window.location.href = '/'}
-                        className="px-4 py-2 bg-[#1B365D] text-white text-xs font-sans rounded hover:bg-[#2D5A8A]"
+                        className="px-4 py-2.5 bg-[#1B365D] hover:bg-[#2D5A8A] text-white text-xs font-sans font-semibold rounded-lg shadow-sm transition-all"
                     >
                         Return to Investor View
                     </button>
