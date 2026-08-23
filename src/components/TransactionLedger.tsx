@@ -1,20 +1,34 @@
 import { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Filter, X, Eye, User } from 'lucide-react';
 import { kamiTheme } from '../constants/theme';
 import { TransactionItem } from '../data/mockData';
+import { useAuth } from '../context/AuthContext';
 
 interface TransactionLedgerProps {
   transactions: TransactionItem[];
 }
 
 export default function TransactionLedger({ transactions }: TransactionLedgerProps) {
+  const { profile } = useAuth();
+  const isGP = profile?.role === 'admin';
+  const currentUserName = profile?.name || 'Alice Smith';
+
+  const [scopeFilter, setScopeFilter] = useState<'mine' | 'all'>(isGP ? 'all' : 'mine');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Completed' | 'Pending Approval' | 'Cancelled'>('All');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
 
-  // Filter transactions by Search Term and Status Filter
-  const filteredTransactions = transactions.filter((tx) => {
+  // 1. Filter transactions by Scope (My Transactions vs All Pool Activity)
+  const scopedTransactions = transactions.filter((tx) => {
+    if (scopeFilter === 'mine') {
+      return tx.user.toLowerCase() === currentUserName.toLowerCase();
+    }
+    return true;
+  });
+
+  // 2. Filter transactions by Search Term and Status Filter
+  const filteredTransactions = scopedTransactions.filter((tx) => {
     const matchesSearch =
       tx.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tx.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,9 +47,9 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
   const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
 
   // Status Counts
-  const completedCount = transactions.filter(t => t.status === 'Completed').length;
-  const pendingCount = transactions.filter(t => t.status === 'Pending Approval').length;
-  const cancelledCount = transactions.filter(t => t.status === 'Cancelled').length;
+  const completedCount = scopedTransactions.filter(t => t.status === 'Completed').length;
+  const pendingCount = scopedTransactions.filter(t => t.status === 'Pending Approval').length;
+  const cancelledCount = scopedTransactions.filter(t => t.status === 'Cancelled').length;
 
   const handleSearchChange = (val: string) => {
     setSearchTerm(val);
@@ -45,6 +59,29 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
   const handleStatusFilterChange = (status: 'All' | 'Completed' | 'Pending Approval' | 'Cancelled') => {
     setStatusFilter(status);
     setCurrentPage(1);
+  };
+
+  const handleScopeFilterChange = (scope: 'mine' | 'all') => {
+    setScopeFilter(scope);
+    setCurrentPage(1);
+  };
+
+  const renderParticipantName = (tx: TransactionItem) => {
+    const isMine = tx.user.toLowerCase() === currentUserName.toLowerCase();
+    if (isGP || isMine) {
+      return (
+        <span className="font-medium text-[#141413] flex items-center gap-1.5">
+          {tx.user}
+          {isMine && (
+            <span className="text-[9px] font-bold bg-[#E4ECF5] text-[#1B365D] px-1.5 py-0.2 rounded uppercase">
+              You
+            </span>
+          )}
+        </span>
+      );
+    }
+    // Anonymize for other LPs in 'All' scope
+    return <span className="text-gray-500 font-normal italic">Syndicate LP</span>;
   };
 
   return (
@@ -58,8 +95,35 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
           </p>
         </div>
         <span className={`self-start sm:self-auto text-[11px] sm:text-xs font-semibold px-3 py-1 rounded-lg border ${kamiTheme.accentLight}`}>
-          {filteredTransactions.length} of {transactions.length} Records
+          {filteredTransactions.length} of {scopedTransactions.length} Records
         </span>
+      </div>
+
+      {/* MODEL 2 SCOPE FILTER TOGGLE (My Transactions vs All Pool Activity) */}
+      <div className="flex items-center gap-2 bg-[#FAF9F5] p-1.5 rounded-lg border border-[#E8E6DC] self-start w-full sm:w-auto font-sans text-xs">
+        <button
+          onClick={() => handleScopeFilterChange('mine')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-all ${
+            scopeFilter === 'mine'
+              ? 'bg-[#1B365D] text-white shadow-sm'
+              : 'text-[#6B6A64] hover:text-[#141413]'
+          }`}
+        >
+          <User size={13} />
+          <span>My Activity</span>
+        </button>
+
+        <button
+          onClick={() => handleScopeFilterChange('all')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-all ${
+            scopeFilter === 'all'
+              ? 'bg-[#1B365D] text-white shadow-sm'
+              : 'text-[#6B6A64] hover:text-[#141413]'
+          }`}
+        >
+          <Eye size={13} />
+          <span>All Pool Activity {isGP ? '(GP Access)' : '(Anonymized)'}</span>
+        </button>
       </div>
 
       {/* CONTROLS: SEARCH BAR & STATUS FILTER PILLS */}
@@ -97,7 +161,7 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
                 : 'bg-[#FAF9F5] text-[#6B6A64] border-[#E8E6DC] hover:text-[#141413]'
             }`}
           >
-            All ({transactions.length})
+            All ({scopedTransactions.length})
           </button>
           <button
             onClick={() => handleStatusFilterChange('Completed')}
@@ -154,12 +218,12 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
                 <tr key={tx.id} className="hover:bg-[#F5F4ED]/50 transition-colors">
                   <td className="py-3.5 px-2.5 font-mono font-medium text-[#141413] whitespace-nowrap">{tx.id}</td>
                   <td className="py-3.5 px-2.5 text-[#504E49] whitespace-nowrap">{tx.date}</td>
-                  <td className="py-3.5 px-2.5 font-medium text-[#141413] whitespace-nowrap">{tx.user}</td>
+                  <td className="py-3.5 px-2.5 whitespace-nowrap">{renderParticipantName(tx)}</td>
                   <td className="py-3.5 px-2.5 text-[#504E49] whitespace-nowrap">{tx.type}</td>
                   <td className="py-3.5 px-2.5 font-semibold text-[#141413] whitespace-nowrap">
                     ${tx.amount.toLocaleString()}
                   </td>
-                  <td className="py-3.5 px-2.5 text-right whitespace-nowrap">
+                  <td className="py-3.5 px-2.5 text-[#141413] text-right whitespace-nowrap">
                     <span
                       className={`inline-block px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider uppercase border ${
                         tx.status === 'Completed'
