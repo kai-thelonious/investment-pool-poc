@@ -1,32 +1,59 @@
 import { FormEvent } from 'react';
 import AdminView from '../components/admin/AdminView';
-import { PortfolioItem } from '../data/mockData';
+import { PortfolioItem, TransactionItem } from '../data/mockData';
 
 interface AdminPageProps {
-    portfolio: PortfolioItem[];
-    totalPendingDeposits: number;
-    handleApproveDeposit: () => void;
-    newValuationInput: string;
-    setNewValuationInput: (val: string) => void;
-    handleUpdateFundValue: (e: FormEvent) => void;
+  portfolio: PortfolioItem[];
+  totalPendingDeposits: number;
+  handleApproveDeposit: () => void;
+  newValuationInput: string;
+  setNewValuationInput: (val: string) => void;
+  handleUpdateFundValue: (e: FormEvent) => void;
+  dividendAmountInput: string;
+  setDividendAmountInput: (value: string) => void;
+  dividendQuarterInput: string;
+  setDividendQuarterInput: (value: string) => void;
+  dividendYieldInput: string;
+  setDividendYieldInput: (value: string) => void;
+  handleDeclareDividend: (e: FormEvent) => void;
+  transactions: TransactionItem[];
+  fundTotal: number;
 }
 
 export default function AdminPage({
-    portfolio,
-    totalPendingDeposits,
-    handleApproveDeposit,
-    newValuationInput,
-    setNewValuationInput,
-    handleUpdateFundValue,
+  portfolio,
+  totalPendingDeposits,
+  handleApproveDeposit,
+  newValuationInput,
+  setNewValuationInput,
+  handleUpdateFundValue,
+  dividendAmountInput,
+  setDividendAmountInput,
+  dividendQuarterInput,
+  setDividendQuarterInput,
+  dividendYieldInput,
+  setDividendYieldInput,
+  handleDeclareDividend,
+  transactions,
+  fundTotal,
 }: AdminPageProps) {
-    return (
-        <AdminView
-            portfolio={portfolio}
-            totalPendingDeposits={totalPendingDeposits}
-            handleApproveDeposit={handleApproveDeposit}
-            newValuationInput={newValuationInput}
-            setNewValuationInput={setNewValuationInput}
-            handleUpdateFundValue={handleUpdateFundValue}
-        />
-    );
+  return (
+    <AdminView
+      portfolio={portfolio}
+      totalPendingDeposits={totalPendingDeposits}
+      handleApproveDeposit={handleApproveDeposit}
+      newValuationInput={newValuationInput}
+      setNewValuationInput={setNewValuationInput}
+      handleUpdateFundValue={handleUpdateFundValue}
+      dividendAmountInput={dividendAmountInput}
+      setDividendAmountInput={setDividendAmountInput}
+      dividendQuarterInput={dividendQuarterInput}
+      setDividendQuarterInput={setDividendQuarterInput}
+      dividendYieldInput={dividendYieldInput}
+      setDividendYieldInput={setDividendYieldInput}
+      handleDeclareDividend={handleDeclareDividend}
+      transactions={transactions}
+      fundTotal={fundTotal}
+    />
+  );
 }

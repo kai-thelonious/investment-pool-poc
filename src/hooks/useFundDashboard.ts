@@ -45,6 +45,9 @@ export function useFundDashboard() {
   // Form inputs state
   const [depositInput, setDepositInput] = useState<string>('');
   const [newValuationInput, setNewValuationInput] = useState<string>('');
+  const [dividendAmountInput, setDividendAmountInput] = useState<string>('');
+  const [dividendQuarterInput, setDividendQuarterInput] = useState<string>('Q2 26');
+  const [dividendYieldInput, setDividendYieldInput] = useState<string>('2.5');
 
   // Supabase Live Status
   const [isSupabaseLive, setIsSupabaseLive] = useState<boolean>(false);
@@ -331,6 +334,37 @@ export function useFundDashboard() {
     }
   };
 
+  const handleDeclareDividend = async (e: FormEvent) => {
+    e.preventDefault();
+    const amount = parseFloat(dividendAmountInput);
+    const yieldRate = parseFloat(dividendYieldInput);
+    if (!amount || amount <= 0 || !dividendQuarterInput) return;
+
+    const newDiv: DividendItem = {
+      id: Date.now(),
+      quarter: dividendQuarterInput,
+      totalPayout: amount,
+      yieldPercent: yieldRate || 2.5,
+      payoutDate: new Date().toISOString().split('T')[0],
+      status: 'Distributed',
+    };
+
+    setDividends(prev => [newDiv, ...prev]);
+    setDividendAmountInput('');
+
+    try {
+      await supabase.from('dividends').insert({
+        quarter: dividendQuarterInput,
+        total_payout: amount,
+        yield_percent: yieldRate || 2.5,
+        payout_date: new Date().toISOString().split('T')[0],
+        status: 'Distributed',
+      });
+    } catch (err) {
+      console.warn('Supabase dividend declare notice:', err);
+    }
+  };
+
   return {
     role,
     setRole,
@@ -352,9 +386,16 @@ export function useFundDashboard() {
     setDepositInput,
     newValuationInput,
     setNewValuationInput,
+    dividendAmountInput,
+    setDividendAmountInput,
+    dividendQuarterInput,
+    setDividendQuarterInput,
+    dividendYieldInput,
+    setDividendYieldInput,
     isSupabaseLive,
     handleUserDeposit,
     handleApproveDeposit,
     handleUpdateFundValue,
+    handleDeclareDividend,
   };
 }

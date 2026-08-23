@@ -29,10 +29,17 @@ export default function App() {
     setDepositInput,
     newValuationInput,
     setNewValuationInput,
+    dividendAmountInput,
+    setDividendAmountInput,
+    dividendQuarterInput,
+    setDividendQuarterInput,
+    dividendYieldInput,
+    setDividendYieldInput,
     isSupabaseLive,
     handleUserDeposit,
     handleApproveDeposit,
     handleUpdateFundValue,
+    handleDeclareDividend,
   } = useFundDashboard();
 
   return (
@@ -94,6 +101,15 @@ export default function App() {
                         newValuationInput={newValuationInput}
                         setNewValuationInput={setNewValuationInput}
                         handleUpdateFundValue={handleUpdateFundValue}
+                        dividendAmountInput={dividendAmountInput}
+                        setDividendAmountInput={setDividendAmountInput}
+                        dividendQuarterInput={dividendQuarterInput}
+                        setDividendQuarterInput={setDividendQuarterInput}
+                        dividendYieldInput={dividendYieldInput}
+                        setDividendYieldInput={setDividendYieldInput}
+                        handleDeclareDividend={handleDeclareDividend}
+                        transactions={transactions}
+                        fundTotal={fundTotal}
                       />
                     </ProtectedRoute>
                   }
