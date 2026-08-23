@@ -1,0 +1,197 @@
+import { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../utils/supabase';
+import { kamiTheme } from '../constants/theme';
+import { Shield, Lock, Mail, User as UserIcon } from 'lucide-react';
+
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const [isSignUp, setIsSignUp] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [fullName, setFullName] = useState<string>('');
+  const [role, setRole] = useState<'investor' | 'admin'>('investor');
+  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrorMsg('');
+    setLoading(true);
+
+    try {
+      if (isSignUp) {
+        // 1. Register with Supabase Auth
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        if (data.user) {
+          // 2. Insert Profile matching auth.user.id
+          const { error: profileErr } = await supabase.from('profiles').insert({
+            id: data.user.id,
+            name: fullName || 'New Investor',
+            role: role,
+            deposited: 0,
+            pending: 0,
+          });
+
+          if (profileErr) console.warn('Profile creation notice:', profileErr);
+        }
+
+        navigate('/');
+      } else {
+        // Log in existing user
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+        navigate('/');
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg('Authentication failed. Please check your credentials.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={`min-h-screen ${kamiTheme.bgPage} flex items-center justify-center p-6 font-serif antialiased`}>
+      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-lg space-y-6`}>
+        <div className="text-center">
+          <div className="inline-flex p-3 bg-[#E4ECF5] text-[#1B365D] rounded-full mb-3">
+            <Shield size={24} />
+          </div>
+          <h1 className="text-2xl font-normal text-[#141413]">Apex Syndicate Portal</h1>
+          <p className={`text-xs font-sans ${kamiTheme.textSub} mt-1`}>
+            {isSignUp ? 'Create your syndicate account' : 'Sign in to access your investment dashboard'}
+          </p>
+        </div>
+
+        {errorMsg && (
+          <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded font-sans">
+            {errorMsg}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4 font-sans text-xs">
+          {isSignUp && (
+            <div>
+              <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+                Full Name
+              </label>
+              <div className="relative">
+                <UserIcon size={16} className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="text"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Alice Smith"
+                  className={`w-full pl-9 ${kamiTheme.inputBg} border ${kamiTheme.inputBorder} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1B365D]`}
+                />
+              </div>
+            </div>
+          )}
+
+          <div>
+            <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+              Email Address
+            </label>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3 top-3 text-gray-400" />
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@syndicate.com"
+                className={`w-full pl-9 ${kamiTheme.inputBg} border ${kamiTheme.inputBorder} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1B365D]`}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+              Password
+            </label>
+            <div className="relative">
+              <Lock size={16} className="absolute left-3 top-3 text-gray-400" />
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className={`w-full pl-9 ${kamiTheme.inputBg} border ${kamiTheme.inputBorder} rounded-md py-2.5 px-3 focus:outline-none focus:border-[#1B365D]`}
+              />
+            </div>
+          </div>
+
+          {isSignUp && (
+            <div>
+              <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+                Select Account Role
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRole('investor')}
+                  className={`py-2 rounded text-xs font-semibold border ${
+                    role === 'investor'
+                      ? 'bg-[#1B365D] text-white border-[#1B365D]'
+                      : 'bg-white text-gray-700 border-gray-200'
+                  }`}
+                >
+                  Investor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('admin')}
+                  className={`py-2 rounded text-xs font-semibold border ${
+                    role === 'admin'
+                      ? 'bg-[#1B365D] text-white border-[#1B365D]'
+                      : 'bg-white text-gray-700 border-gray-200'
+                  }`}
+                >
+                  General Partner
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full ${kamiTheme.accentInk} ${kamiTheme.accentInkHover} text-white font-semibold uppercase tracking-wider py-3 rounded-md transition-all shadow-sm mt-2`}
+          >
+            {loading ? 'Processing...' : isSignUp ? 'Create Syndicate Account' : 'Sign In'}
+          </button>
+        </form>
+
+        <div className="text-center pt-2 font-sans text-xs">
+          <button
+            type="button"
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setErrorMsg('');
+            }}
+            className="text-[#1B365D] hover:underline font-semibold"
+          >
+            {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Register here"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
