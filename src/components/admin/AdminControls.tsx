@@ -160,15 +160,25 @@ export default function AdminControls({
             </div>
           </div>
           <div>
-            <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">Total Payout ($)</label>
+            <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">
+              Total Payout ($) <span className="normal-case font-normal text-gray-500">(Leave blank to auto-compute)</span>
+            </label>
             <input
               type="number"
               value={dividendAmountInput}
               onChange={(e) => setDividendAmountInput(e.target.value)}
-              placeholder="e.g. 4500"
+              placeholder={`Auto: $${Math.round(fundTotal * ((parseFloat(dividendYieldInput) || 2.5) / 100)).toLocaleString()}`}
               className={`w-full ${kamiTheme.inputBg} border ${kamiTheme.inputBorder} rounded-lg py-2.5 px-3 focus:outline-none focus:border-[#1B365D]`}
             />
           </div>
+
+          <div className="p-2.5 rounded-lg bg-[#FAF9F5] border border-[#E8E6DC] text-[11px] font-sans text-[#504E49] flex items-center justify-between">
+            <span>Calculated Payout ({dividendYieldInput || '2.5'}% of NAV):</span>
+            <span className="font-bold text-[#1B365D]">
+              ${(dividendAmountInput ? parseFloat(dividendAmountInput) : Math.round(fundTotal * ((parseFloat(dividendYieldInput) || 2.5) / 100))).toLocaleString()}
+            </span>
+          </div>
+
           <button
             type="submit"
             className={`w-full ${kamiTheme.accentInk} ${kamiTheme.accentInkHover} text-white text-xs font-semibold tracking-wider uppercase py-3 rounded-lg transition-all shadow-sm`}

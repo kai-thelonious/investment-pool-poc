@@ -336,15 +336,15 @@ export function useFundDashboard() {
 
   const handleDeclareDividend = async (e: FormEvent) => {
     e.preventDefault();
-    const amount = parseFloat(dividendAmountInput);
-    const yieldRate = parseFloat(dividendYieldInput);
+    const yieldRate = parseFloat(dividendYieldInput) || 2.5;
+    const amount = parseFloat(dividendAmountInput) || Math.round(fundTotal * (yieldRate / 100));
     if (!amount || amount <= 0 || !dividendQuarterInput) return;
 
     const newDiv: DividendItem = {
       id: Date.now(),
       quarter: dividendQuarterInput,
       totalPayout: amount,
-      yieldPercent: yieldRate || 2.5,
+      yieldPercent: yieldRate,
       payoutDate: new Date().toISOString().split('T')[0],
       status: 'Distributed',
     };
@@ -356,7 +356,7 @@ export function useFundDashboard() {
       await supabase.from('dividends').insert({
         quarter: dividendQuarterInput,
         total_payout: amount,
-        yield_percent: yieldRate || 2.5,
+        yield_percent: yieldRate,
         payout_date: new Date().toISOString().split('T')[0],
         status: 'Distributed',
       });
