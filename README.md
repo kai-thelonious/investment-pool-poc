@@ -1,58 +1,48 @@
 # Apex Syndicate Pool (Fund POC)
 
-A modern, full-stack investment pool dashboard proof-of-concept built with **React 19**, **TypeScript**, **Vite**, **React Router**, and **Supabase**.
+A full-stack investment pool dashboard proof-of-concept built with React 19, TypeScript, Vite, React Router, and Supabase.
 
----
+## Overview
 
-## 🌟 Overview
+Apex Syndicate Pool provides real-time portfolio management and transparency for syndicate managers (General Partners) and participants (Investors). The application tracks aggregate Net Asset Value (NAV), individual capital allocations, quarterly dividend yield distributions, and transaction clearances.
 
-The **Apex Syndicate Pool** provides real-time transparency for syndicate fund managers (General Partners) and syndicate participants (Investors). It tracks aggregate Net Asset Value (NAV), individual capital allocations, quarterly dividend yield distributions, and capital clearances.
-
----
-
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
 - **Routing**: React Router (`react-router-dom`)
-- **Data Visualization**: Recharts & Lucide Icons
-- **Backend & Database**: Supabase (PostgreSQL, Supabase Auth, Realtime WebSockets, RLS)
+- **Data Visualization**: Recharts, Lucide Icons
+- **Backend & Database**: Supabase (PostgreSQL, Supabase Auth, Realtime WebSockets, Row-Level Security)
 
----
+## Features
 
-## ✨ Key Features
+- **Investor View**: Personal stake metrics, pro-rata pool share percentage, quarterly valuation chart, and distributed yield dividends.
+- **General Partner (Admin) View**: Pending capital clearance approvals and pool valuation updates.
+- **Transaction Ledger**: Audit trail of subscriptions, initial deposits, and settlement status.
+- **Authentication & Role-Based Access Control**: Supabase Auth integration with protected route guards for Investors and General Partners.
+- **Realtime Synchronization**: Postgres mutation listeners updating client state via WebSockets.
+- **Database Security**: Row-Level Security (RLS) policies enforcing identity and role permissions at the database level.
 
-- **📊 Investor View**: Track personal stake, pro-rata pool share percentage, quarterly valuation curve, and distributed yield dividends.
-- **🛡️ General Partner (Admin) View**: Approve incoming investor capital clearances and post new fund valuation marks.
-- **📜 Transaction Ledger**: Full real-time audit trail of capital requests, initial deposits, and settlement statuses.
-- **🔐 Auth & Role-Based Access Control (RBAC)**: Secure authentication via Supabase Auth with protected routes for Investors and General Partners.
-- **⚡ Realtime WebSocket Sync**: Live Postgres mutation listener that automatically re-syncs state across all connected clients.
-- **🔒 Database Security**: Row-Level Security (RLS) policies enforcing identity and permission checks at the database level.
+## Development Setup
 
----
-
-## 🚀 Quick Start
-
-### 1. Installation
+### 1. Install Dependencies
 ```bash
 npm install
 ```
 
-### 2. Environment Configuration
+### 2. Configure Environment
 Create a `.env.local` file in the root directory:
 ```env
 VITE_SUPABASE_URL=https://your-supabase-url.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-### 3. Development Server
+### 3. Start Development Server
 ```bash
 npm run dev
 ```
 
----
+## Scripts
 
-## 🧪 Build & Verification Commands
-
-- **Type Check**: `npm run typecheck`
-- **Linter**: `npm run lint`
-- **Production Build**: `npm run build`
+- `npm run typecheck` - Run TypeScript compiler checks
+- `npm run lint` - Run ESLint checks
+- `npm run build` - Create production build
