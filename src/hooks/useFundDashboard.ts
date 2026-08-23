@@ -7,11 +7,15 @@ import {
   INITIAL_TRANSACTIONS,
   INITIAL_PORTFOLIO,
   INITIAL_DIVIDENDS,
+  INITIAL_SECTOR_EXPOSURE,
+  INITIAL_RISK_RETURN_DATA,
   UserItem,
   TransactionItem,
   FundHistoryItem,
   PortfolioItem,
   DividendItem,
+  SectorExposureItem,
+  RiskReturnItem,
 } from '../data/mockData';
 
 export function useFundDashboard() {
@@ -33,6 +37,10 @@ export function useFundDashboard() {
 
   // Quarterly Dividends Data
   const [dividends, setDividends] = useState<DividendItem[]>(INITIAL_DIVIDENDS);
+
+  // Sector Exposure & Risk Metrics Data
+  const [sectors, setSectors] = useState<SectorExposureItem[]>(INITIAL_SECTOR_EXPOSURE);
+  const [riskData] = useState<RiskReturnItem[]>(INITIAL_RISK_RETURN_DATA);
 
   // Form inputs state
   const [depositInput, setDepositInput] = useState<string>('');
@@ -108,6 +116,14 @@ export function useFundDashboard() {
         { name: 'Global Debt Securities', value: Math.round(currentTotal * 0.26) },
         { name: 'Private Equity Stake', value: Math.round(currentTotal * 0.18) },
         { name: 'Cash Reserves', value: Math.round(currentTotal * 0.12) },
+      ]);
+
+      setSectors([
+        { sector: 'Fintech & Payments', allocation: Math.round(currentTotal * 0.32), color: '#1B365D' },
+        { sector: 'Enterprise SaaS', allocation: Math.round(currentTotal * 0.24), color: '#2D5A8A' },
+        { sector: 'Clean Energy & Climate', allocation: Math.round(currentTotal * 0.20), color: '#4A7BB0' },
+        { sector: 'Global Debt Securities', allocation: Math.round(currentTotal * 0.14), color: '#7EA6D0' },
+        { sector: 'Cash & Short-Term Reserves', allocation: Math.round(currentTotal * 0.10), color: '#C0D5EC' },
       ]);
 
       // 5. Fetch Dividends if table exists
@@ -295,6 +311,8 @@ export function useFundDashboard() {
     transactions,
     portfolio,
     dividends,
+    sectors,
+    riskData,
     depositInput,
     setDepositInput,
     newValuationInput,

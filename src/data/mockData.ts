@@ -33,6 +33,19 @@ export interface DividendItem {
   status: string;
 }
 
+export interface SectorExposureItem {
+  sector: string;
+  allocation: number;
+  color: string;
+}
+
+export interface RiskReturnItem {
+  name: string;
+  riskScore: number;
+  expectedYield: number;
+  allocation: number;
+}
+
 export const INITIAL_FUND_TOTAL: number = 148000;
 
 export const INITIAL_FUND_HISTORY: FundHistoryItem[] = [
@@ -69,4 +82,19 @@ export const INITIAL_DIVIDENDS: DividendItem[] = [
   { id: 3, quarter: 'Q3 25', totalPayout: 2800, yieldPercent: 2.5, payoutDate: '2025-09-30', status: 'Distributed' },
   { id: 4, quarter: 'Q4 25', totalPayout: 3250, yieldPercent: 2.5, payoutDate: '2025-12-31', status: 'Distributed' },
   { id: 5, quarter: 'Q1 26', totalPayout: 3700, yieldPercent: 2.5, payoutDate: '2026-03-31', status: 'Distributed' },
+];
+
+export const INITIAL_SECTOR_EXPOSURE: SectorExposureItem[] = [
+  { sector: 'Fintech & Payments', allocation: 48000, color: '#1B365D' },
+  { sector: 'Enterprise SaaS', allocation: 35000, color: '#2D5A8A' },
+  { sector: 'Clean Energy & Climate', allocation: 32000, color: '#4A7BB0' },
+  { sector: 'Global Debt Securities', allocation: 30000, color: '#7EA6D0' },
+  { sector: 'Cash & Short-Term Reserves', allocation: 20000, color: '#C0D5EC' },
+];
+
+export const INITIAL_RISK_RETURN_DATA: RiskReturnItem[] = [
+  { name: 'US Core Equities Fund', riskScore: 4.2, expectedYield: 12.5, allocation: 65000 },
+  { name: 'SaaS Growth Venture', riskScore: 7.8, expectedYield: 22.0, allocation: 27000 },
+  { name: 'Global High-Yield Debt', riskScore: 3.5, expectedYield: 7.8, allocation: 38000 },
+  { name: 'Short-Term Cash Reserves', riskScore: 1.1, expectedYield: 4.5, allocation: 18000 },
 ];

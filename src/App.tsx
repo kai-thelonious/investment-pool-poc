@@ -23,6 +23,8 @@ export default function App() {
     transactions,
     portfolio,
     dividends,
+    sectors,
+    riskData,
     depositInput,
     setDepositInput,
     newValuationInput,
@@ -70,6 +72,8 @@ export default function App() {
                         currentUser={currentUser}
                         currentUserSharePercent={currentUserSharePercent}
                         dividends={dividends}
+                        sectors={sectors}
+                        riskData={riskData}
                         depositInput={depositInput}
                         setDepositInput={setDepositInput}
                         handleUserDeposit={handleUserDeposit}
