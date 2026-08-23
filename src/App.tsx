@@ -98,6 +98,7 @@ export default function App() {
                     <ProtectedRoute allowedRoles={['admin']}>
                       <AdminPage
                         portfolio={portfolio}
+                        users={users}
                         totalPendingDeposits={totalPendingDeposits}
                         handleApproveDeposit={handleApproveDeposit}
                         handleApproveSingleTransaction={handleApproveSingleTransaction}

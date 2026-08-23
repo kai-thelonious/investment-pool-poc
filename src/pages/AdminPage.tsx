@@ -1,9 +1,10 @@
 import { FormEvent } from 'react';
 import AdminView from '../components/admin/AdminView';
-import { PortfolioItem, TransactionItem } from '../data/mockData';
+import { PortfolioItem, TransactionItem, UserItem } from '../data/mockData';
 
 interface AdminPageProps {
   portfolio: PortfolioItem[];
+  users: UserItem[];
   totalPendingDeposits: number;
   handleApproveDeposit: () => void;
   handleApproveSingleTransaction: (txId: string, participantName: string, amount: number) => void;
@@ -24,6 +25,7 @@ interface AdminPageProps {
 
 export default function AdminPage({
   portfolio,
+  users,
   totalPendingDeposits,
   handleApproveDeposit,
   handleApproveSingleTransaction,
@@ -44,6 +46,7 @@ export default function AdminPage({
   return (
     <AdminView
       portfolio={portfolio}
+      users={users}
       totalPendingDeposits={totalPendingDeposits}
       handleApproveDeposit={handleApproveDeposit}
       handleApproveSingleTransaction={handleApproveSingleTransaction}
