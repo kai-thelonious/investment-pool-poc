@@ -68,6 +68,9 @@ export default function App() {
                 currentUserSharePercent={currentUserSharePercent}
                 fundTotal={fundTotal}
                 totalPendingDeposits={totalPendingDeposits}
+                users={users}
+                dividends={dividends}
+                transactions={transactions}
               />
 
               <Routes>
