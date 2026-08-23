@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import { kamiTheme } from '../constants/theme';
-import { Shield, Lock, Mail, User as UserIcon } from 'lucide-react';
+import { Shield, Lock, Mail, User as UserIcon, LogIn } from 'lucide-react';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,6 +13,34 @@ export default function LoginPage() {
   const [role, setRole] = useState<'investor' | 'admin'>('investor');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+
+  const demoAccounts = [
+    { name: 'Alice Smith', email: 'alice.smith@syndicate.com', role: 'LP Investor ($45k Stake)' },
+    { name: 'Bob Jones', email: 'bob.jones@syndicate.com', role: 'LP Investor ($25k Stake)' },
+    { name: 'Charlie Day', email: 'charlie.day@syndicate.com', role: 'LP Investor ($12.5k Stake)' },
+    { name: 'General Partner', email: 'gp.manager@syndicate.com', role: 'GP Manager (Admin Controls)' },
+  ];
+
+  const handleDemoSignIn = async (demoEmail: string) => {
+    setErrorMsg('');
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: demoEmail,
+        password: 'Password123!',
+      });
+      if (error) throw error;
+      navigate('/');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg('Demo sign-in failed.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -65,8 +93,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`min-h-screen ${kamiTheme.bgPage} flex items-center justify-center p-6 font-serif antialiased`}>
-      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-lg space-y-6`}>
+    <div className={`min-h-screen ${kamiTheme.bgPage} flex flex-col items-center justify-center p-4 sm:p-6 font-serif antialiased space-y-6`}>
+      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-6 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-lg space-y-6`}>
         <div className="text-center">
           <div className="inline-flex p-3 bg-[#E4ECF5] text-[#1B365D] rounded-full mb-3">
             <Shield size={24} />
@@ -179,7 +207,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="text-center pt-2 font-sans text-xs">
+        <div className="text-center pt-1 font-sans text-xs">
           <button
             type="button"
             onClick={() => {
@@ -190,6 +218,31 @@ export default function LoginPage() {
           >
             {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Register here"}
           </button>
+        </div>
+      </div>
+
+      {/* QUICK DEMO ACCOUNT LOGINS */}
+      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-5 rounded-xl border ${kamiTheme.cardBorder} shadow-sm font-sans space-y-3`}>
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#141413]">
+          <LogIn size={15} className="text-[#1B365D]" /> 1-Click Quick Demo Sign-In
+        </div>
+        <p className="text-[11px] text-[#6B6A64]">Simulate acting as each investor or general partner:</p>
+
+        <div className="grid grid-cols-1 gap-2 text-xs">
+          {demoAccounts.map((acc) => (
+            <button
+              key={acc.email}
+              onClick={() => handleDemoSignIn(acc.email)}
+              disabled={loading}
+              className="p-2.5 bg-[#FAF9F5] hover:bg-[#E8E6DC]/50 border border-[#E8E6DC] rounded-lg text-left flex items-center justify-between transition-colors group"
+            >
+              <div>
+                <span className="font-semibold text-[#141413] block group-hover:text-[#1B365D]">{acc.name}</span>
+                <span className="text-[10px] text-[#6B6A64]">{acc.role}</span>
+              </div>
+              <span className="text-[10px] font-semibold text-[#1B365D] bg-[#E4ECF5] px-2 py-0.5 rounded">Sign In</span>
+            </button>
+          ))}
         </div>
       </div>
     </div>

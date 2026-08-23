@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, FormEvent } from 'react';
 import { supabase } from '../utils/supabase';
+import { useAuth } from '../context/AuthContext';
 import {
   INITIAL_FUND_TOTAL,
   INITIAL_FUND_HISTORY,
@@ -210,7 +211,13 @@ export function useFundDashboard() {
   }, [loadData]);
 
   // --- COMPUTED PROPERTIES ---
-  const currentUser: UserItem = users.find(u => u.id === activeUserId) || users[0] || {
+  const { user: authUser, profile } = useAuth();
+
+  const currentUser: UserItem = users.find(u => 
+    (authUser && u.id === authUser.id) ||
+    (profile && u.name.toLowerCase().includes(profile.name.toLowerCase())) ||
+    (activeUserId && u.id === activeUserId)
+  ) || users[0] || {
     id: 'usr-1',
     name: 'Alice Smith',
     deposited: 0,
