@@ -40,7 +40,7 @@ export function useFundDashboard() {
 
   // Sector Exposure & Risk Metrics Data
   const [sectors, setSectors] = useState<SectorExposureItem[]>(INITIAL_SECTOR_EXPOSURE);
-  const [riskData] = useState<RiskReturnItem[]>(INITIAL_RISK_RETURN_DATA);
+  const [riskData, setRiskData] = useState<RiskReturnItem[]>(INITIAL_RISK_RETURN_DATA);
 
   // Form inputs state
   const [depositInput, setDepositInput] = useState<string>('');
@@ -126,7 +126,40 @@ export function useFundDashboard() {
         { sector: 'Cash & Short-Term Reserves', allocation: Math.round(currentTotal * 0.10), color: '#C0D5EC' },
       ]);
 
-      // 5. Fetch Dividends if table exists
+      // 5. Fetch Sector Allocation from Supabase if table exists
+      const { data: sectorData, error: sectorErr } = await supabase
+        .from('sector_allocation')
+        .select('*');
+
+      if (!sectorErr && sectorData && sectorData.length > 0) {
+        hasLiveSupabaseData = true;
+        setSectors(
+          sectorData.map(s => ({
+            sector: s.sector,
+            allocation: Number(s.allocation || 0),
+            color: s.color || '#1B365D',
+          }))
+        );
+      }
+
+      // 6. Fetch Risk Metrics from Supabase if table exists
+      const { data: riskMetricsData, error: riskErr } = await supabase
+        .from('risk_metrics')
+        .select('*');
+
+      if (!riskErr && riskMetricsData && riskMetricsData.length > 0) {
+        hasLiveSupabaseData = true;
+        setRiskData(
+          riskMetricsData.map(r => ({
+            name: r.name,
+            riskScore: Number(r.risk_score || r.riskScore || 0),
+            expectedYield: Number(r.expected_yield || r.expectedYield || 0),
+            allocation: Number(r.allocation || 0),
+          }))
+        );
+      }
+
+      // 7. Fetch Dividends if table exists
       const { data: dividendData, error: dividendError } = await supabase
         .from('dividends')
         .select('*')
@@ -164,6 +197,8 @@ export function useFundDashboard() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, () => loadData())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'fund_history' }, () => loadData())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'dividends' }, () => loadData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sector_allocation' }, () => loadData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'risk_metrics' }, () => loadData())
       .subscribe();
 
     return () => {
