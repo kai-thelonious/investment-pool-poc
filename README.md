@@ -1,3 +1,5 @@
+# Generated with Antigravity CLI
+
 # Apex Syndicate Pool (Fund POC)
 
 A full-stack investment pool dashboard proof-of-concept built with React 19, TypeScript, Vite, React Router, and Supabase.
@@ -22,27 +24,3 @@ Apex Syndicate Pool provides real-time portfolio management and transparency for
 - **Realtime Synchronization**: Postgres mutation listeners updating client state via WebSockets.
 - **Database Security**: Row-Level Security (RLS) policies enforcing identity and role permissions at the database level.
 
-## Development Setup
-
-### 1. Install Dependencies
-```bash
-npm install
-```
-
-### 2. Configure Environment
-Create a `.env.local` file in the root directory:
-```env
-VITE_SUPABASE_URL=https://your-supabase-url.supabase.co
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-### 3. Start Development Server
-```bash
-npm run dev
-```
-
-## Scripts
-
-- `npm run typecheck` - Run TypeScript compiler checks
-- `npm run lint` - Run ESLint checks
-- `npm run build` - Create production build
