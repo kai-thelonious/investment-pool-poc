@@ -1,13 +1,13 @@
-export interface FundHistoryItem {
-  date: string;
-  value: number;
-}
-
 export interface UserItem {
   id: string;
   name: string;
   deposited: number;
   pending: number;
+}
+
+export interface FundHistoryItem {
+  date: string;
+  value: number;
 }
 
 export interface TransactionItem {
@@ -57,23 +57,30 @@ export const INITIAL_FUND_HISTORY: FundHistoryItem[] = [
 ];
 
 export const INITIAL_USERS: UserItem[] = [
-  { id: 'usr-1', name: '[MOCK] Alice Smith', deposited: 45000, pending: 0 },
-  { id: 'usr-2', name: '[MOCK] Bob Jones', deposited: 25000, pending: 0 },
-  { id: 'usr-3', name: '[MOCK] Charlie Day', deposited: 12500, pending: 0 },
+  { id: 'usr-1', name: 'Alice Smith', deposited: 45000, pending: 5000 },
+  { id: 'usr-2', name: 'Bob Jones', deposited: 25000, pending: 6000 },
+  { id: 'usr-3', name: 'Charlie Day', deposited: 12500, pending: 3500 },
 ];
 
 export const INITIAL_TRANSACTIONS: TransactionItem[] = [
-  { id: 'TX-104', date: '2026-03-01', user: '[MOCK] Alice Smith', type: 'Subscription', amount: 15000, status: 'Completed' },
-  { id: 'TX-103', date: '2026-02-15', user: '[MOCK] Bob Jones', type: 'Subscription', amount: 25000, status: 'Completed' },
-  { id: 'TX-102', date: '2026-01-10', user: '[MOCK] Charlie Day', type: 'Subscription', amount: 12500, status: 'Completed' },
-  { id: 'TX-101', date: '2026-01-01', user: '[MOCK] Alice Smith', type: 'Initial Deposit', amount: 30000, status: 'Completed' },
+  { id: 'TX-111', date: '2026-08-23', user: 'Bob Jones', type: 'High-Yield Debt Request', amount: 6000, status: 'Pending Approval' },
+  { id: 'TX-110', date: '2026-08-22', user: 'Charlie Day', type: 'Q3 Subscription Request', amount: 3500, status: 'Pending Approval' },
+  { id: 'TX-109', date: '2026-08-20', user: 'Alice Smith', type: 'Summer Pool Top-Up', amount: 5000, status: 'Pending Approval' },
+  { id: 'TX-108', date: '2026-08-12', user: 'Bob Jones', type: 'Debt Pool Tranche', amount: 7500, status: 'Completed' },
+  { id: 'TX-107', date: '2026-07-05', user: 'Alice Smith', type: 'Dividend Reinvestment', amount: 2500, status: 'Completed' },
+  { id: 'TX-106', date: '2026-06-22', user: 'Charlie Day', type: 'Q2 Top-Up', amount: 5000, status: 'Completed' },
+  { id: 'TX-105', date: '2026-05-18', user: 'Bob Jones', type: 'Secondary Subscription', amount: 10000, status: 'Completed' },
+  { id: 'TX-104', date: '2026-04-10', user: 'Alice Smith', type: 'Follow-on Tranche', amount: 15000, status: 'Completed' },
+  { id: 'TX-103', date: '2026-03-05', user: 'Charlie Day', type: 'Angel Subscription', amount: 7500, status: 'Completed' },
+  { id: 'TX-102', date: '2026-02-01', user: 'Bob Jones', type: 'Seed Commitment', amount: 15000, status: 'Completed' },
+  { id: 'TX-101', date: '2026-01-15', user: 'Alice Smith', type: 'Initial Subscription', amount: 30000, status: 'Completed' },
 ];
 
 export const INITIAL_PORTFOLIO: PortfolioItem[] = [
-  { name: '[MOCK] US Equities', value: 65000 },
-  { name: '[MOCK] Global Debt', value: 38000 },
-  { name: '[MOCK] Private Equity', value: 27000 },
-  { name: '[MOCK] Cash Reserves', value: 18000 },
+  { name: 'US Equities', value: 65000 },
+  { name: 'Global Debt', value: 38000 },
+  { name: 'Private Equity', value: 27000 },
+  { name: 'Cash Reserves', value: 18000 },
 ];
 
 export const INITIAL_DIVIDENDS: DividendItem[] = [
