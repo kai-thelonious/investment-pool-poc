@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 export default function Header({ activeUserId, setActiveUserId, users, isSupabaseLive }: HeaderProps) {
-  const { profile, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
 
   return (
     <header className="max-w-7xl mx-auto mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-[#E8E6DC] flex flex-col lg:flex-row lg:items-end justify-between gap-4">
@@ -28,20 +28,20 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
         </div>
 
         {/* Mobile Sign Out Button */}
-        {profile && (
+        {user && (
           <button
             onClick={signOut}
             title="Sign Out"
-            className="lg:hidden flex items-center gap-1 px-2.5 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-sans font-semibold transition-all"
+            className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-sans font-semibold transition-all"
           >
             <LogOut size={14} />
-            <span className="hidden xs:inline">Sign Out</span>
+            <span>Sign Out</span>
           </button>
         )}
       </div>
 
       <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2.5 font-sans">
-        {/* DATA SOURCE & USER SELECTOR ROW */}
+        {/* DATA SOURCE & USER BADGE ROW */}
         <div className="flex items-center gap-2 w-full xs:w-auto">
           <div className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] sm:text-xs font-semibold ${
             isSupabaseLive ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800'
@@ -59,6 +59,11 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
               }`}>
                 {profile.role === 'admin' ? 'GP' : 'LP'}
               </span>
+            </div>
+          ) : user ? (
+            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC] text-[11px] sm:text-xs">
+              <Users size={13} className="text-[#1B365D] shrink-0" />
+              <span className="font-semibold text-[#141413]">{user.email?.split('@')[0]}</span>
             </div>
           ) : (
             <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC]">
@@ -122,13 +127,14 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
         </div>
 
         {/* Desktop Sign Out Button */}
-        {profile && (
+        {user && (
           <button
             onClick={signOut}
             title="Sign Out"
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-semibold transition-all"
+            className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-semibold transition-all"
           >
             <LogOut size={14} />
+            <span>Sign Out</span>
           </button>
         )}
       </div>
