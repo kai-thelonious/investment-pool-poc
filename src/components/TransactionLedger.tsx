@@ -16,8 +16,8 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
   const [scopeFilter, setScopeFilter] = useState<'mine' | 'all'>(isGP ? 'all' : 'mine');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Completed' | 'Pending Approval' | 'Cancelled'>('All');
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 5;
 
   // 1. Filter transactions by Scope (My Transactions vs All Pool Activity)
   const scopedTransactions = transactions.filter((tx) => {
@@ -251,12 +251,30 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
 
       {/* PAGINATION CONTROLS */}
       {filteredTransactions.length > 0 && (
-        <div className="flex items-center justify-between pt-4 border-t border-[#E8E6DC] text-xs font-sans">
-          <span className="text-[#6B6A64] text-[11px] sm:text-xs">
-            Showing <strong>{startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredTransactions.length)}</strong> of <strong>{filteredTransactions.length}</strong> records
-          </span>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-[#E8E6DC] text-xs font-sans">
+          <div className="flex items-center gap-3">
+            <span className="text-[#6B6A64] text-[11px] sm:text-xs">
+              Showing <strong>{startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredTransactions.length)}</strong> of <strong>{filteredTransactions.length}</strong> records
+            </span>
 
-          <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] text-[#6B6A64]">
+              <span>Rows per page:</span>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-[#FAF9F5] border border-[#E8E6DC] text-[#141413] font-semibold text-xs rounded px-1.5 py-0.5 focus:outline-none cursor-pointer"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 self-end sm:self-auto">
             <button
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={safeCurrentPage === 1}
