@@ -17,18 +17,18 @@ export default function DepositForm({
   handleUserDeposit,
 }: DepositFormProps) {
   return (
-    <div className={`${kamiTheme.cardBg} p-8 rounded-lg border ${kamiTheme.cardBorder} flex flex-col justify-between`}>
+    <div className={`${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} flex flex-col justify-between`}>
       <div>
-        <h2 className="text-xl font-normal mb-1 flex items-center gap-2">
-          <PlusCircle className="text-[#1B365D]" size={20} /> Capital Subscription
+        <h2 className="text-lg sm:text-xl font-normal mb-1 flex items-center gap-2 text-[#141413]">
+          <PlusCircle className="text-[#1B365D]" size={18} /> Capital Subscription
         </h2>
-        <p className={`text-xs font-sans ${kamiTheme.textSub} mb-6`}>
+        <p className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textSub} mb-4 sm:mb-6`}>
           Submitting as <strong>{currentUser.name}</strong>.
         </p>
 
         <form onSubmit={handleUserDeposit} className="space-y-4 font-sans">
           <div>
-            <label className={`block text-xs font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-2`}>
+            <label className={`block text-[11px] sm:text-xs font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-2`}>
               Subscription Amount ($)
             </label>
             <input
@@ -49,7 +49,7 @@ export default function DepositForm({
       </div>
 
       {currentUser.pending > 0 && (
-        <div className={`mt-6 p-3 rounded border ${kamiTheme.accentLight} text-xs font-sans`}>
+        <div className={`mt-4 sm:mt-6 p-3 rounded-lg border ${kamiTheme.accentLight} text-xs font-sans`}>
           Status: <strong>${currentUser.pending.toLocaleString()}</strong> awaiting GP review.
         </div>
       )}

@@ -42,7 +42,7 @@ export default function App() {
       <Route
         path="*"
         element={
-          <div className={`min-h-screen ${kamiTheme.bgPage} ${kamiTheme.textPrimary} p-6 md:p-12 font-serif antialiased`}>
+          <div className={`min-h-screen ${kamiTheme.bgPage} ${kamiTheme.textPrimary} p-4 sm:p-6 md:p-12 font-serif antialiased`}>
             <Header
               activeUserId={activeUserId}
               setActiveUserId={setActiveUserId}
@@ -50,7 +50,7 @@ export default function App() {
               isSupabaseLive={isSupabaseLive}
             />
 
-            <main className="max-w-7xl mx-auto space-y-8">
+            <main className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
               <MetricCards
                 currentUser={currentUser}
                 currentUserCurrentValue={currentUserCurrentValue}
