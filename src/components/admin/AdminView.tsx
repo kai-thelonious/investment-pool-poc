@@ -46,10 +46,15 @@ export default function AdminView({
   fundTotal,
 }: AdminViewProps) {
   return (
-    <div className="space-y-6 sm:space-y-8">
-      {/* GP Visualization Layer */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+      {/* Left Matrix Column: Visualizations Stack (Spans 2 Columns) */}
+      <div className="lg:col-span-2 space-y-6 sm:space-y-8">
         <AssetBreakdownChart portfolio={portfolio} />
+        <LPCapitalDistributionChart users={users} />
+      </div>
+
+      {/* Right Column: General Partner Controls & Command Drawers (Spans 1 Column) */}
+      <div className="lg:col-span-1">
         <AdminControls
           totalPendingDeposits={totalPendingDeposits}
           handleApproveDeposit={handleApproveDeposit}
@@ -68,11 +73,6 @@ export default function AdminView({
           transactions={transactions}
           fundTotal={fundTotal}
         />
-      </div>
-
-      {/* LP Capital Distribution Bar Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-        <LPCapitalDistributionChart users={users} />
       </div>
     </div>
   );

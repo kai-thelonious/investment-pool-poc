@@ -9,7 +9,7 @@ interface AssetBreakdownChartProps {
 
 export default function AssetBreakdownChart({ portfolio }: AssetBreakdownChartProps) {
   return (
-    <div className={`lg:col-span-2 ${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder}`}>
+    <div className={`${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder}`}>
       <h2 className="text-lg sm:text-xl font-normal mb-1 flex items-center gap-2 text-[#141413]">
         <PieIcon className="text-[#1B365D]" size={18} /> Asset Breakdown
       </h2>
