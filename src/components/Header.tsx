@@ -1,8 +1,9 @@
-import { User, Shield, Users, FileText, Database, LogOut } from 'lucide-react';
+import { User, Shield, FileText, Database } from 'lucide-react';
 import { kamiTheme } from '../constants/theme';
 import { UserItem } from '../data/mockData';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import UserProfileDropdown from './UserProfileDropdown';
 
 interface HeaderProps {
   activeUserId: string;
@@ -11,12 +12,12 @@ interface HeaderProps {
   isSupabaseLive?: boolean;
 }
 
-export default function Header({ activeUserId, setActiveUserId, users, isSupabaseLive }: HeaderProps) {
-  const { user, profile, signOut } = useAuth();
+export default function Header({ isSupabaseLive }: HeaderProps) {
+  const { profile } = useAuth();
 
   return (
     <header className="max-w-7xl mx-auto mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-[#E8E6DC] flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between w-full lg:w-auto">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
@@ -27,21 +28,14 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
           <h1 className="text-2xl sm:text-4xl font-normal tracking-tight text-[#141413]">Apex Syndicate Pool</h1>
         </div>
 
-        {/* Mobile Sign Out Button */}
-        {user && (
-          <button
-            onClick={signOut}
-            title="Sign Out"
-            className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-sans font-semibold transition-all"
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
-        )}
+        {/* Mobile User Profile Dropdown */}
+        <div className="lg:hidden">
+          <UserProfileDropdown isSupabaseLive={isSupabaseLive} />
+        </div>
       </div>
 
       <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2.5 font-sans">
-        {/* DATA SOURCE & USER BADGE ROW */}
+        {/* DATA SOURCE BADGE */}
         <div className="flex items-center gap-2 w-full xs:w-auto">
           <div className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] sm:text-xs font-semibold ${
             isSupabaseLive ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800'
@@ -49,38 +43,6 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
             <Database size={13} className={isSupabaseLive ? 'text-emerald-600' : 'text-amber-600'} />
             <span>{isSupabaseLive ? 'Supabase Live' : 'Mock Fallback'}</span>
           </div>
-
-          {profile ? (
-            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC] text-[11px] sm:text-xs">
-              <Users size={13} className="text-[#1B365D] shrink-0" />
-              <span className="font-semibold text-[#141413]">{profile.name}</span>
-              <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
-                profile.role === 'admin' ? 'bg-[#1B365D] text-white' : 'bg-gray-200 text-gray-700'
-              }`}>
-                {profile.role === 'admin' ? 'GP' : 'LP'}
-              </span>
-            </div>
-          ) : user ? (
-            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC] text-[11px] sm:text-xs">
-              <Users size={13} className="text-[#1B365D] shrink-0" />
-              <span className="font-semibold text-[#141413]">{user.email?.split('@')[0]}</span>
-            </div>
-          ) : (
-            <div className="flex-1 xs:flex-none flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1.5 rounded-lg border border-[#E8E6DC]">
-              <Users size={13} className="text-[#1B365D] shrink-0" />
-              <select
-                value={activeUserId}
-                onChange={(e) => setActiveUserId(e.target.value)}
-                className="bg-transparent text-[11px] sm:text-xs font-semibold text-[#141413] focus:outline-none cursor-pointer w-full"
-              >
-                {users.map(u => (
-                  <option key={u.id} value={u.id}>
-                    {u.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
         </div>
 
         {/* ROUTER NAVIGATION TAB GROUP */}
@@ -126,17 +88,10 @@ export default function Header({ activeUserId, setActiveUserId, users, isSupabas
           </NavLink>
         </div>
 
-        {/* Desktop Sign Out Button */}
-        {user && (
-          <button
-            onClick={signOut}
-            title="Sign Out"
-            className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-[#E8E6DC]/40 hover:bg-red-50 hover:text-red-700 text-[#504E49] rounded-lg border border-[#E5E3D8] text-xs font-semibold transition-all"
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
-        )}
+        {/* Desktop Interactive User Profile Dropdown */}
+        <div className="hidden lg:block">
+          <UserProfileDropdown isSupabaseLive={isSupabaseLive} />
+        </div>
       </div>
     </header>
   );
