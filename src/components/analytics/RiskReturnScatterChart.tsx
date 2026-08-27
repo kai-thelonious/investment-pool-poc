@@ -1,5 +1,14 @@
 import { ShieldAlert } from 'lucide-react';
-import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip, ZAxis, Cell } from 'recharts';
+import {
+  ResponsiveContainer,
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ZAxis,
+  Cell,
+} from 'recharts';
 import { kamiTheme } from '../../constants/theme';
 import { RiskReturnItem } from '../../data/mockData';
 
@@ -50,9 +59,22 @@ export default function RiskReturnScatterChart({ items }: RiskReturnScatterChart
                   return (
                     <div className="bg-[#FAF9F5] p-3 rounded-lg border border-[#E8E6DC] shadow-md font-sans text-xs space-y-1">
                       <p className="font-serif font-bold text-[#141413]">{data.name}</p>
-                      <p className="text-[#504E49]">Risk Rating: <span className="font-semibold text-[#1B365D]">{data.riskScore} / 10</span></p>
-                      <p className="text-[#504E49]">Target Return: <span className="font-semibold text-emerald-700">{data.expectedYield}%</span></p>
-                      <p className="text-[#504E49]">Allocation: <span className="font-semibold text-[#141413]">${data.allocation.toLocaleString()}</span></p>
+                      <p className="text-[#504E49]">
+                        Risk Rating:{' '}
+                        <span className="font-semibold text-[#1B365D]">{data.riskScore} / 10</span>
+                      </p>
+                      <p className="text-[#504E49]">
+                        Target Return:{' '}
+                        <span className="font-semibold text-emerald-700">
+                          {data.expectedYield}%
+                        </span>
+                      </p>
+                      <p className="text-[#504E49]">
+                        Allocation:{' '}
+                        <span className="font-semibold text-[#141413]">
+                          ${data.allocation.toLocaleString()}
+                        </span>
+                      </p>
                     </div>
                   );
                 }
@@ -61,7 +83,10 @@ export default function RiskReturnScatterChart({ items }: RiskReturnScatterChart
             />
             <Scatter name="Holdings" data={items}>
               {items.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]}
+                />
               ))}
             </Scatter>
           </ScatterChart>

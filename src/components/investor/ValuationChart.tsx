@@ -8,10 +8,14 @@ interface ValuationChartProps {
 
 export default function ValuationChart({ fundHistory }: ValuationChartProps) {
   return (
-    <div className={`lg:col-span-2 ${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder}`}>
+    <div
+      className={`lg:col-span-2 ${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder}`}
+    >
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-xl font-normal text-[#141413]">Fund Valuation Curve</h2>
-        <span className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textMuted}`}>Calculated Quarterly</span>
+        <span className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textMuted}`}>
+          Calculated Quarterly
+        </span>
       </div>
 
       <div className="h-60 sm:h-72 w-full">

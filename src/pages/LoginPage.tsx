@@ -18,16 +18,21 @@ export default function LoginPage() {
     { name: 'Alice Smith', email: 'alice.smith@syndicate.com', role: 'LP Investor ($45k Stake)' },
     { name: 'Bob Jones', email: 'bob.jones@syndicate.com', role: 'LP Investor ($25k Stake)' },
     { name: 'Charlie Day', email: 'charlie.day@syndicate.com', role: 'LP Investor ($12.5k Stake)' },
-    { name: 'General Partner', email: 'gp.manager@syndicate.com', role: 'GP Manager (Admin Controls)' },
+    {
+      name: 'General Partner',
+      email: 'gp.manager@syndicate.com',
+      role: 'GP Manager (Admin Controls)',
+    },
   ];
 
   const handleDemoSignIn = async (demoEmail: string) => {
     setErrorMsg('');
     setLoading(true);
+    const demoPassword = import.meta.env.VITE_DEMO_PASSWORD || 'Password123!';
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: demoEmail,
-        password: 'Password123!',
+        password: demoPassword,
       });
       if (error) throw error;
       navigate('/');
@@ -93,15 +98,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`min-h-screen ${kamiTheme.bgPage} flex flex-col items-center justify-center p-4 sm:p-6 font-serif antialiased space-y-6`}>
-      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-6 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-lg space-y-6`}>
+    <div
+      className={`min-h-screen ${kamiTheme.bgPage} flex flex-col items-center justify-center p-4 sm:p-6 font-serif antialiased space-y-6`}
+    >
+      <div
+        className={`w-full max-w-md ${kamiTheme.cardBg} p-6 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-lg space-y-6`}
+      >
         <div className="text-center">
           <div className="inline-flex p-3 bg-[#E4ECF5] text-[#1B365D] rounded-full mb-3">
             <Shield size={24} />
           </div>
           <h1 className="text-2xl font-normal text-[#141413]">Apex Syndicate Portal</h1>
           <p className={`text-xs font-sans ${kamiTheme.textSub} mt-1`}>
-            {isSignUp ? 'Create your syndicate account' : 'Sign in to access your investment dashboard'}
+            {isSignUp
+              ? 'Create your syndicate account'
+              : 'Sign in to access your investment dashboard'}
           </p>
         </div>
 
@@ -114,7 +125,9 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4 font-sans text-xs">
           {isSignUp && (
             <div>
-              <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+              <label
+                className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -132,7 +145,9 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+            <label
+              className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}
+            >
               Email Address
             </label>
             <div className="relative">
@@ -149,7 +164,9 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+            <label
+              className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}
+            >
               Password
             </label>
             <div className="relative">
@@ -168,7 +185,9 @@ export default function LoginPage() {
 
           {isSignUp && (
             <div>
-              <label className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}>
+              <label
+                className={`block font-semibold uppercase tracking-wider ${kamiTheme.textMuted} mb-1.5`}
+              >
                 Select Account Role
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -222,11 +241,15 @@ export default function LoginPage() {
       </div>
 
       {/* QUICK DEMO ACCOUNT LOGINS */}
-      <div className={`w-full max-w-md ${kamiTheme.cardBg} p-5 rounded-xl border ${kamiTheme.cardBorder} shadow-sm font-sans space-y-3`}>
+      <div
+        className={`w-full max-w-md ${kamiTheme.cardBg} p-5 rounded-xl border ${kamiTheme.cardBorder} shadow-sm font-sans space-y-3`}
+      >
         <div className="flex items-center gap-1.5 text-xs font-semibold text-[#141413]">
           <LogIn size={15} className="text-[#1B365D]" /> 1-Click Quick Demo Sign-In
         </div>
-        <p className="text-[11px] text-[#6B6A64]">Simulate acting as each investor or general partner:</p>
+        <p className="text-[11px] text-[#6B6A64]">
+          Simulate acting as each investor or general partner:
+        </p>
 
         <div className="grid grid-cols-1 gap-2 text-xs">
           {demoAccounts.map((acc) => (
@@ -237,10 +260,14 @@ export default function LoginPage() {
               className="p-2.5 bg-[#FAF9F5] hover:bg-[#E8E6DC]/50 border border-[#E8E6DC] rounded-lg text-left flex items-center justify-between transition-colors group"
             >
               <div>
-                <span className="font-semibold text-[#141413] block group-hover:text-[#1B365D]">{acc.name}</span>
+                <span className="font-semibold text-[#141413] block group-hover:text-[#1B365D]">
+                  {acc.name}
+                </span>
                 <span className="text-[10px] text-[#6B6A64]">{acc.role}</span>
               </div>
-              <span className="text-[10px] font-semibold text-[#1B365D] bg-[#E4ECF5] px-2 py-0.5 rounded">Sign In</span>
+              <span className="text-[10px] font-semibold text-[#1B365D] bg-[#E4ECF5] px-2 py-0.5 rounded">
+                Sign In
+              </span>
             </button>
           ))}
         </div>

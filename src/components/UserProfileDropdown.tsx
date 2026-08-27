@@ -1,6 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, LogOut, Shield, FileText, DollarSign, Database, UserCheck } from 'lucide-react';
+import {
+  ChevronDown,
+  LogOut,
+  Shield,
+  FileText,
+  DollarSign,
+  Database,
+  UserCheck,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface UserProfileDropdownProps {
@@ -43,12 +51,17 @@ export default function UserProfileDropdown({ isSupabaseLive }: UserProfileDropd
           {userInitial}
         </div>
         <span className="truncate max-w-[110px] sm:max-w-[140px]">{displayName}</span>
-        <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded shrink-0 ${
-          isGP ? 'bg-[#1B365D] text-white' : 'bg-gray-200 text-gray-700'
-        }`}>
+        <span
+          className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded shrink-0 ${
+            isGP ? 'bg-[#1B365D] text-white' : 'bg-gray-200 text-gray-700'
+          }`}
+        >
           {isGP ? 'GP' : 'LP'}
         </span>
-        <ChevronDown size={13} className={`text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          size={13}
+          className={`text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {/* DROPDOWN MENU */}
@@ -112,10 +125,15 @@ export default function UserProfileDropdown({ isSupabaseLive }: UserProfileDropd
           <div className="p-3 text-[10px] space-y-1.5 text-[#6B6A64]">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1">
-                <Database size={11} className={isSupabaseLive ? 'text-emerald-600' : 'text-amber-600'} />
+                <Database
+                  size={11}
+                  className={isSupabaseLive ? 'text-emerald-600' : 'text-amber-600'}
+                />
                 Database:
               </span>
-              <span className={`font-semibold ${isSupabaseLive ? 'text-emerald-700' : 'text-amber-700'}`}>
+              <span
+                className={`font-semibold ${isSupabaseLive ? 'text-emerald-700' : 'text-amber-700'}`}
+              >
                 {isSupabaseLive ? 'Supabase Live' : 'Mock Fallback'}
               </span>
             </div>

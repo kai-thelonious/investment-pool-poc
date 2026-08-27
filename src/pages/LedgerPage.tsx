@@ -2,9 +2,9 @@ import TransactionLedger from '../components/TransactionLedger';
 import { TransactionItem } from '../data/mockData';
 
 interface LedgerPageProps {
-    transactions: TransactionItem[];
+  transactions: TransactionItem[];
 }
 
 export default function LedgerPage({ transactions }: LedgerPageProps) {
-    return <TransactionLedger transactions={transactions} />;
+  return <TransactionLedger transactions={transactions} />;
 }

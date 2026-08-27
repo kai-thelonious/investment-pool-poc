@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search, ChevronLeft, ChevronRight, Filter, X, Eye, User } from 'lucide-react';
 import { kamiTheme } from '../constants/theme';
+import { TRANSACTION_STATUS } from '../constants/status';
 import { TransactionItem } from '../data/mockData';
 import { useAuth } from '../context/AuthContext';
 
@@ -15,7 +16,7 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
 
   const [scopeFilter, setScopeFilter] = useState<'mine' | 'all'>(isGP ? 'all' : 'mine');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<'All' | 'Completed' | 'Pending Approval' | 'Cancelled'>('All');
+  const [statusFilter, setStatusFilter] = useState<string>('All');
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -34,8 +35,7 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
       tx.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tx.type.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === 'All' ? true : tx.status === statusFilter;
+    const matchesStatus = statusFilter === 'All' ? true : tx.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -47,16 +47,24 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
   const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
 
   // Status Counts
-  const completedCount = scopedTransactions.filter(t => t.status === 'Completed').length;
-  const pendingCount = scopedTransactions.filter(t => t.status === 'Pending Approval').length;
-  const cancelledCount = scopedTransactions.filter(t => t.status === 'Cancelled').length;
+  const completedCount = scopedTransactions.filter(
+    (t) => t.status === TRANSACTION_STATUS.COMPLETED
+  ).length;
+  const pendingCount = scopedTransactions.filter(
+    (t) => t.status === TRANSACTION_STATUS.PENDING
+  ).length;
+  const cancelledCount = scopedTransactions.filter(
+    (t) => t.status === TRANSACTION_STATUS.CANCELLED
+  ).length;
 
   const handleSearchChange = (val: string) => {
     setSearchTerm(val);
     setCurrentPage(1);
   };
 
-  const handleStatusFilterChange = (status: 'All' | 'Completed' | 'Pending Approval' | 'Cancelled') => {
+  const handleStatusFilterChange = (
+    status: 'All' | 'Completed' | 'Pending Approval' | 'Cancelled'
+  ) => {
     setStatusFilter(status);
     setCurrentPage(1);
   };
@@ -85,16 +93,22 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
   };
 
   return (
-    <div className={`${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-sm font-sans mt-6 sm:mt-8 space-y-6`}>
+    <div
+      className={`${kamiTheme.cardBg} p-5 sm:p-8 rounded-xl border ${kamiTheme.cardBorder} shadow-sm font-sans mt-6 sm:mt-8 space-y-6`}
+    >
       {/* HEADER & COUNTER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E6DC] pb-4">
         <div>
-          <h2 className="text-lg sm:text-xl font-serif font-normal text-[#141413]">Transaction Ledger</h2>
+          <h2 className="text-lg sm:text-xl font-serif font-normal text-[#141413]">
+            Transaction Ledger
+          </h2>
           <p className={`text-[11px] sm:text-xs ${kamiTheme.textSub} mt-0.5`}>
             Real-time capital movement and audit history.
           </p>
         </div>
-        <span className={`self-start sm:self-auto text-[11px] sm:text-xs font-semibold px-3 py-1 rounded-lg border ${kamiTheme.accentLight}`}>
+        <span
+          className={`self-start sm:self-auto text-[11px] sm:text-xs font-semibold px-3 py-1 rounded-lg border ${kamiTheme.accentLight}`}
+        >
           {filteredTransactions.length} of {scopedTransactions.length} Records
         </span>
       </div>
@@ -202,7 +216,9 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
       <div className="overflow-x-auto -mx-2 px-2">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className={`border-b ${kamiTheme.cardBorder} text-[#6B6A64] uppercase tracking-wider font-semibold`}>
+            <tr
+              className={`border-b ${kamiTheme.cardBorder} text-[#6B6A64] uppercase tracking-wider font-semibold`}
+            >
               <th className="pb-3 px-2.5 whitespace-nowrap">Reference ID</th>
               <th className="pb-3 px-2.5 whitespace-nowrap">Date</th>
               <th className="pb-3 px-2.5 whitespace-nowrap">Participant</th>
@@ -216,7 +232,9 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
             {paginatedTransactions.length > 0 ? (
               paginatedTransactions.map((tx) => (
                 <tr key={tx.id} className="hover:bg-[#F5F4ED]/50 transition-colors">
-                  <td className="py-3.5 px-2.5 font-mono font-medium text-[#141413] whitespace-nowrap">{tx.id}</td>
+                  <td className="py-3.5 px-2.5 font-mono font-medium text-[#141413] whitespace-nowrap">
+                    {tx.id}
+                  </td>
                   <td className="py-3.5 px-2.5 text-[#504E49] whitespace-nowrap">{tx.date}</td>
                   <td className="py-3.5 px-2.5 whitespace-nowrap">{renderParticipantName(tx)}</td>
                   <td className="py-3.5 px-2.5 text-[#504E49] whitespace-nowrap">{tx.type}</td>
@@ -229,8 +247,8 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
                         tx.status === 'Completed'
                           ? 'bg-[#E4ECF5] text-[#1B365D] border-[#1B365D]/20'
                           : tx.status === 'Pending Approval'
-                          ? 'bg-amber-500/10 text-amber-800 border-amber-500/30'
-                          : 'bg-red-50 text-red-700 border-red-200'
+                            ? 'bg-amber-500/10 text-amber-800 border-amber-500/30'
+                            : 'bg-red-50 text-red-700 border-red-200'
                       }`}
                     >
                       {tx.status}
@@ -240,8 +258,33 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="py-8 text-center text-xs text-[#6B6A64]">
-                  No transaction records matched your search query &quot;<strong>{searchTerm || statusFilter}</strong>&quot;.
+                <td colSpan={6} className="py-12 text-center">
+                  <div className="flex flex-col items-center justify-center space-y-3">
+                    <div className="w-12 h-12 rounded-full bg-[#E4ECF5] text-[#1B365D] flex items-center justify-center">
+                      <Filter size={20} />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-semibold text-[#141413]">
+                        No transaction records found
+                      </p>
+                      <p className="text-xs text-[#6B6A64] max-w-sm mx-auto">
+                        {searchTerm || statusFilter !== 'All'
+                          ? `No transactions match your current search query or "${statusFilter}" filter.`
+                          : 'There are currently no transactions logged in the syndicate ledger.'}
+                      </p>
+                    </div>
+                    {(searchTerm || statusFilter !== 'All') && (
+                      <button
+                        onClick={() => {
+                          setSearchTerm('');
+                          setStatusFilter('All');
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-[#E4ECF5] hover:bg-[#1B365D] hover:text-white rounded-lg transition-colors"
+                      >
+                        <X size={14} /> Clear Active Filters
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             )}
@@ -254,7 +297,11 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-[#E8E6DC] text-xs font-sans">
           <div className="flex items-center gap-3">
             <span className="text-[#6B6A64] text-[11px] sm:text-xs">
-              Showing <strong>{startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredTransactions.length)}</strong> of <strong>{filteredTransactions.length}</strong> records
+              Showing{' '}
+              <strong>
+                {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredTransactions.length)}
+              </strong>{' '}
+              of <strong>{filteredTransactions.length}</strong> records
             </span>
 
             <div className="flex items-center gap-1.5 text-[11px] text-[#6B6A64]">
@@ -276,7 +323,7 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
 
           <div className="flex items-center gap-1.5 self-end sm:self-auto">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={safeCurrentPage === 1}
               className={`p-1.5 rounded-lg border text-xs flex items-center gap-1 font-semibold transition-all ${
                 safeCurrentPage === 1
@@ -292,7 +339,7 @@ export default function TransactionLedger({ transactions }: TransactionLedgerPro
             </span>
 
             <button
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
               disabled={safeCurrentPage >= totalPages}
               className={`p-1.5 rounded-lg border text-xs flex items-center gap-1 font-semibold transition-all ${
                 safeCurrentPage >= totalPages

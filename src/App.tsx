@@ -53,7 +53,9 @@ export default function App() {
       <Route
         path="*"
         element={
-          <div className={`min-h-screen ${kamiTheme.bgPage} ${kamiTheme.textPrimary} p-4 sm:p-6 md:p-12 font-serif antialiased`}>
+          <div
+            className={`min-h-screen ${kamiTheme.bgPage} ${kamiTheme.textPrimary} p-4 sm:p-6 md:p-12 font-serif antialiased`}
+          >
             <Header
               activeUserId={activeUserId}
               setActiveUserId={setActiveUserId}

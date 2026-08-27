@@ -1,6 +1,12 @@
 import { FormEvent } from 'react';
 import InvestorView from '../components/investor/InvestorView';
-import { FundHistoryItem, UserItem, DividendItem, SectorExposureItem, RiskReturnItem } from '../data/mockData';
+import {
+  FundHistoryItem,
+  UserItem,
+  DividendItem,
+  SectorExposureItem,
+  RiskReturnItem,
+} from '../data/mockData';
 
 interface InvestorPageProps {
   fundHistory: FundHistoryItem[];

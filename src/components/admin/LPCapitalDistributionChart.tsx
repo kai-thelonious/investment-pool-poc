@@ -10,7 +10,7 @@ interface LPCapitalDistributionChartProps {
 export default function LPCapitalDistributionChart({ users }: LPCapitalDistributionChartProps) {
   const totalDeposited = users.reduce((sum, u) => sum + u.deposited, 0);
 
-  const chartData = users.map(u => ({
+  const chartData = users.map((u) => ({
     name: u.name,
     deposited: u.deposited,
     pending: u.pending,
@@ -55,9 +55,22 @@ export default function LPCapitalDistributionChart({ users }: LPCapitalDistribut
                   return (
                     <div className="bg-[#FAF9F5] p-3 rounded-lg border border-[#E8E6DC] shadow-md font-sans text-xs space-y-1">
                       <p className="font-serif font-bold text-[#141413]">{data.name}</p>
-                      <p className="text-[#504E49]">Paid-In Capital: <span className="font-semibold text-[#1B365D]">${data.deposited.toLocaleString()}</span></p>
-                      <p className="text-[#504E49]">Pending Commitment: <span className="font-semibold text-amber-700">${data.pending.toLocaleString()}</span></p>
-                      <p className="text-[#504E49]">Pool Ownership Share: <span className="font-bold text-[#141413]">{data.sharePercent}%</span></p>
+                      <p className="text-[#504E49]">
+                        Paid-In Capital:{' '}
+                        <span className="font-semibold text-[#1B365D]">
+                          ${data.deposited.toLocaleString()}
+                        </span>
+                      </p>
+                      <p className="text-[#504E49]">
+                        Pending Commitment:{' '}
+                        <span className="font-semibold text-amber-700">
+                          ${data.pending.toLocaleString()}
+                        </span>
+                      </p>
+                      <p className="text-[#504E49]">
+                        Pool Ownership Share:{' '}
+                        <span className="font-bold text-[#141413]">{data.sharePercent}%</span>
+                      </p>
                     </div>
                   );
                 }
@@ -66,7 +79,10 @@ export default function LPCapitalDistributionChart({ users }: LPCapitalDistribut
             />
             <Bar dataKey="deposited" radius={[4, 4, 0, 0]}>
               {chartData.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]}
+                />
               ))}
             </Bar>
           </BarChart>
@@ -75,14 +91,20 @@ export default function LPCapitalDistributionChart({ users }: LPCapitalDistribut
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4 pt-4 border-t border-[#E8E6DC]/60 font-sans text-xs">
         {chartData.map((user, index) => (
-          <div key={user.name} className="flex items-center justify-between p-2 rounded bg-[#FAF9F5] border border-[#E8E6DC]">
+          <div
+            key={user.name}
+            className="flex items-center justify-between p-2 rounded bg-[#FAF9F5] border border-[#E8E6DC]"
+          >
             <div className="flex items-center gap-2 truncate">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: kamiTheme.piePalette[index % kamiTheme.piePalette.length] }}></span>
+              <span
+                className="w-2.5 h-2.5 rounded-full shrink-0"
+                style={{
+                  backgroundColor: kamiTheme.piePalette[index % kamiTheme.piePalette.length],
+                }}
+              ></span>
               <span className="text-[#141413] truncate font-medium">{user.name}</span>
             </div>
-            <span className="font-semibold text-[#1B365D] shrink-0 ml-2">
-              {user.sharePercent}%
-            </span>
+            <span className="font-semibold text-[#1B365D] shrink-0 ml-2">{user.sharePercent}%</span>
           </div>
         ))}
       </div>

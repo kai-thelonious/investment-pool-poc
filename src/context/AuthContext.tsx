@@ -26,23 +26,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Fetch the user's profile role from the profiles table
-  const fetchProfile = useCallback(async (userId: string) => {
+  const fetchProfile = useCallback(async (userId: string, email?: string) => {
     try {
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
-      if (data) {
+      if (!error && data) {
         setProfile({
           id: data.id,
           name: data.name,
-          role: data.role || 'investor',
+          role: (data.role as 'investor' | 'admin') || 'investor',
         });
+        return;
       }
     } catch (err) {
-      console.warn('Profile fetch error:', err);
+      console.warn('Profile fetch notice:', err);
+    }
+
+    // Heuristic Fallback: If no DB profile exists yet, check email
+    const isGP = email
+      ? email.includes('gp') || email.includes('admin') || email.includes('manager')
+      : false;
+    const defaultRole: 'investor' | 'admin' = isGP ? 'admin' : 'investor';
+    const defaultName = isGP ? 'General Partner' : email?.split('@')[0] || 'Syndicate Member';
+
+    setProfile({
+      id: userId,
+      name: defaultName,
+      role: defaultRole,
+    });
+
+    try {
+      await supabase.from('profiles').upsert({
+        id: userId,
+        name: defaultName,
+        role: defaultRole,
+        deposited: 0,
+        pending: 0,
+      });
+    } catch (upsertErr) {
+      console.warn('Auto profile creation notice:', upsertErr);
     } finally {
       setLoading(false);
     }
@@ -54,17 +76,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfile(session.user.id, session.user.email);
       } else {
         setLoading(false);
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfile(session.user.id, session.user.email);
       } else {
         setProfile(null);
         setLoading(false);

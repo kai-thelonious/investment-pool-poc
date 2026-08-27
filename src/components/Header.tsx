@@ -21,11 +21,15 @@ export default function Header({ isSupabaseLive }: HeaderProps) {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
-            <span className={`text-[10px] sm:text-xs uppercase tracking-widest font-sans font-semibold ${kamiTheme.textSub}`}>
+            <span
+              className={`text-[10px] sm:text-xs uppercase tracking-widest font-sans font-semibold ${kamiTheme.textSub}`}
+            >
               Editorial Fund Report
             </span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-normal tracking-tight text-[#141413]">Apex Syndicate Pool</h1>
+          <h1 className="text-2xl sm:text-4xl font-normal tracking-tight text-[#141413]">
+            Apex Syndicate Pool
+          </h1>
         </div>
 
         {/* Mobile User Profile Dropdown */}
@@ -37,10 +41,17 @@ export default function Header({ isSupabaseLive }: HeaderProps) {
       <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2.5 font-sans">
         {/* DATA SOURCE BADGE */}
         <div className="flex items-center gap-2 w-full xs:w-auto">
-          <div className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] sm:text-xs font-semibold ${
-            isSupabaseLive ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800'
-          }`}>
-            <Database size={13} className={isSupabaseLive ? 'text-emerald-600' : 'text-amber-600'} />
+          <div
+            className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] sm:text-xs font-semibold ${
+              isSupabaseLive
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-amber-50 border-amber-200 text-amber-800'
+            }`}
+          >
+            <Database
+              size={13}
+              className={isSupabaseLive ? 'text-emerald-600' : 'text-amber-600'}
+            />
             <span>{isSupabaseLive ? 'Supabase Live' : 'Mock Fallback'}</span>
           </div>
         </div>

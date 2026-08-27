@@ -40,14 +40,16 @@ export default function AdminControls({
   transactions,
   fundTotal,
 }: AdminControlsProps) {
-  const pendingTx = transactions.filter(t => t.status === 'Pending Approval');
+  const pendingTx = transactions.filter((t) => t.status === 'Pending Approval');
   const estimatedMgmtFee = Math.round(fundTotal * 0.02);
-  const estimatedCarry = Math.round(Math.max(0, fundTotal - 100000) * 0.20);
+  const estimatedCarry = Math.round(Math.max(0, fundTotal - 100000) * 0.2);
 
   return (
     <div className="space-y-6">
       {/* GP Performance & Fee Metrics Card */}
-      <div className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}>
+      <div
+        className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}
+      >
         <h3 className="font-normal text-base sm:text-lg mb-1 text-[#141413] flex items-center gap-2">
           <ShieldCheck className="text-[#1B365D]" size={18} /> GP Carry & Management Fees
         </h3>
@@ -57,20 +59,32 @@ export default function AdminControls({
 
         <div className="grid grid-cols-2 gap-3 font-sans text-xs">
           <div className="p-3 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg">
-            <span className="text-[#6B6A64] text-[10px] uppercase font-semibold block">Annual Mgmt Fee (2%)</span>
-            <span className="font-bold text-sm text-[#141413] mt-1 block">${estimatedMgmtFee.toLocaleString()}/yr</span>
+            <span className="text-[#6B6A64] text-[10px] uppercase font-semibold block">
+              Annual Mgmt Fee (2%)
+            </span>
+            <span className="font-bold text-sm text-[#141413] mt-1 block">
+              ${estimatedMgmtFee.toLocaleString()}/yr
+            </span>
           </div>
           <div className="p-3 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg">
-            <span className="text-[#6B6A64] text-[10px] uppercase font-semibold block">Est. Carried Interest (20%)</span>
-            <span className="font-bold text-sm text-emerald-700 mt-1 block">${estimatedCarry.toLocaleString()}</span>
+            <span className="text-[#6B6A64] text-[10px] uppercase font-semibold block">
+              Est. Carried Interest (20%)
+            </span>
+            <span className="font-bold text-sm text-emerald-700 mt-1 block">
+              ${estimatedCarry.toLocaleString()}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Capital Clearances Queue */}
-      <div className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}>
+      <div
+        className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}
+      >
         <div className="flex items-center justify-between mb-1">
-          <h3 className="font-normal text-base sm:text-lg text-[#141413]">Capital Clearances Queue</h3>
+          <h3 className="font-normal text-base sm:text-lg text-[#141413]">
+            Capital Clearances Queue
+          </h3>
           <span className="text-[11px] font-sans font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
             {pendingTx.length} Pending
           </span>
@@ -83,11 +97,18 @@ export default function AdminControls({
           <div className="font-sans space-y-3">
             <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
               {pendingTx.map((tx) => (
-                <div key={tx.id} className="p-3 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg flex items-center justify-between gap-2 text-xs">
+                <div
+                  key={tx.id}
+                  className="p-3 bg-[#FAF9F5] border border-[#E8E6DC] rounded-lg flex items-center justify-between gap-2 text-xs"
+                >
                   <div className="truncate">
                     <span className="font-semibold text-[#141413] block truncate">{tx.user}</span>
-                    <span className="text-[10px] text-[#6B6A64] font-mono block">{tx.id} • {tx.date}</span>
-                    <span className="font-bold text-[#1B365D] block mt-0.5">${tx.amount.toLocaleString()}</span>
+                    <span className="text-[10px] text-[#6B6A64] font-mono block">
+                      {tx.id} • {tx.date}
+                    </span>
+                    <span className="font-bold text-[#1B365D] block mt-0.5">
+                      ${tx.amount.toLocaleString()}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
@@ -127,11 +148,15 @@ export default function AdminControls({
       </div>
 
       {/* Fund Revaluation Form */}
-      <div className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}>
+      <div
+        className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}
+      >
         <h3 className="font-normal text-base sm:text-lg mb-1 text-[#141413] flex items-center gap-2">
           <TrendingUp size={18} className="text-[#1B365D]" /> Post Valuation Mark
         </h3>
-        <p className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textSub} mb-4`}>Re-evaluate aggregate net asset value.</p>
+        <p className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textSub} mb-4`}>
+          Re-evaluate aggregate net asset value.
+        </p>
         <form onSubmit={handleUpdateFundValue} className="space-y-3 font-sans">
           <div className="relative">
             <DollarSign size={14} className="absolute left-3 top-3 text-gray-400" />
@@ -153,15 +178,21 @@ export default function AdminControls({
       </div>
 
       {/* Issue Dividend Distribution Form */}
-      <div className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}>
+      <div
+        className={`${kamiTheme.cardBg} p-5 sm:p-6 rounded-xl border ${kamiTheme.cardBorder} shadow-sm`}
+      >
         <h3 className="font-normal text-base sm:text-lg mb-1 text-[#141413] flex items-center gap-2">
           <Award size={18} className="text-[#1B365D]" /> Declare Dividend Payout
         </h3>
-        <p className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textSub} mb-4`}>Distribute quarterly yield to pool participants.</p>
+        <p className={`text-[11px] sm:text-xs font-sans ${kamiTheme.textSub} mb-4`}>
+          Distribute quarterly yield to pool participants.
+        </p>
         <form onSubmit={handleDeclareDividend} className="space-y-3 font-sans text-xs">
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">Quarter</label>
+              <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">
+                Quarter
+              </label>
               <input
                 type="text"
                 value={dividendQuarterInput}
@@ -171,7 +202,9 @@ export default function AdminControls({
               />
             </div>
             <div>
-              <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">Yield %</label>
+              <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">
+                Yield %
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -184,7 +217,10 @@ export default function AdminControls({
           </div>
           <div>
             <label className="block text-[10px] font-semibold uppercase text-[#6B6A64] mb-1">
-              Total Payout ($) <span className="normal-case font-normal text-gray-500">(Leave blank to auto-compute)</span>
+              Total Payout ($){' '}
+              <span className="normal-case font-normal text-gray-500">
+                (Leave blank to auto-compute)
+              </span>
             </label>
             <input
               type="number"
@@ -198,7 +234,11 @@ export default function AdminControls({
           <div className="p-2.5 rounded-lg bg-[#FAF9F5] border border-[#E8E6DC] text-[11px] font-sans text-[#504E49] flex items-center justify-between">
             <span>Calculated Payout ({dividendYieldInput || '2.5'}% of NAV):</span>
             <span className="font-bold text-[#1B365D]">
-              ${(dividendAmountInput ? parseFloat(dividendAmountInput) : Math.round(fundTotal * ((parseFloat(dividendYieldInput) || 2.5) / 100))).toLocaleString()}
+              $
+              {(dividendAmountInput
+                ? parseFloat(dividendAmountInput)
+                : Math.round(fundTotal * ((parseFloat(dividendYieldInput) || 2.5) / 100))
+              ).toLocaleString()}
             </span>
           </div>
 

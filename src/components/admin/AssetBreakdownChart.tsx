@@ -30,7 +30,10 @@ export default function AssetBreakdownChart({ portfolio }: AssetBreakdownChartPr
               dataKey="value"
             >
               {portfolio.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={kamiTheme.piePalette[index % kamiTheme.piePalette.length]}
+                />
               ))}
             </Pie>
             <Tooltip
@@ -48,10 +51,18 @@ export default function AssetBreakdownChart({ portfolio }: AssetBreakdownChartPr
 
       <div className="flex flex-wrap justify-center gap-3 sm:gap-6 mt-4 font-sans text-[11px] sm:text-xs">
         {portfolio.map((item, index) => (
-          <div key={item.name} className="flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1 rounded border border-[#E8E6DC]">
-            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: kamiTheme.piePalette[index % kamiTheme.piePalette.length] }}></span>
+          <div
+            key={item.name}
+            className="flex items-center gap-1.5 bg-[#FAF9F5] px-2.5 py-1 rounded border border-[#E8E6DC]"
+          >
+            <span
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ backgroundColor: kamiTheme.piePalette[index % kamiTheme.piePalette.length] }}
+            ></span>
             <span className={kamiTheme.textSecondary}>{item.name}</span>
-            <span className={`font-semibold ${kamiTheme.textPrimary}`}>(${item.value.toLocaleString()})</span>
+            <span className={`font-semibold ${kamiTheme.textPrimary}`}>
+              (${item.value.toLocaleString()})
+            </span>
           </div>
         ))}
       </div>

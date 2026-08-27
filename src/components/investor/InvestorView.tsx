@@ -5,7 +5,13 @@ import DepositForm from './DepositForm';
 import DividendsTab from './DividendsTab';
 import SectorExposureChart from '../analytics/SectorExposureChart';
 import RiskReturnScatterChart from '../analytics/RiskReturnScatterChart';
-import { FundHistoryItem, UserItem, DividendItem, SectorExposureItem, RiskReturnItem } from '../../data/mockData';
+import {
+  FundHistoryItem,
+  UserItem,
+  DividendItem,
+  SectorExposureItem,
+  RiskReturnItem,
+} from '../../data/mockData';
 
 interface InvestorViewProps {
   fundHistory: FundHistoryItem[];
@@ -71,9 +77,7 @@ export default function InvestorView({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-        {activeTab === 'chart' && (
-          <ValuationChart fundHistory={fundHistory} />
-        )}
+        {activeTab === 'chart' && <ValuationChart fundHistory={fundHistory} />}
 
         {activeTab === 'dividends' && (
           <DividendsTab

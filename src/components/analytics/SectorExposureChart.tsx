@@ -28,7 +28,11 @@ export default function SectorExposureChart({ sectors }: SectorExposureChartProp
 
       <div className="h-64 sm:h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={sectors} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <BarChart
+            data={sectors}
+            layout="vertical"
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
             <XAxis
               type="number"
               stroke={kamiTheme.stoneHex}
@@ -55,7 +59,10 @@ export default function SectorExposureChart({ sectors }: SectorExposureChartProp
             />
             <Bar dataKey="allocation" radius={[0, 4, 4, 0]}>
               {sectors.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || kamiTheme.piePalette[index % kamiTheme.piePalette.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.color || kamiTheme.piePalette[index % kamiTheme.piePalette.length]}
+                />
               ))}
             </Bar>
           </BarChart>
@@ -66,9 +73,15 @@ export default function SectorExposureChart({ sectors }: SectorExposureChartProp
         {sectors.map((s) => {
           const pct = totalAllocation > 0 ? ((s.allocation / totalAllocation) * 100).toFixed(1) : 0;
           return (
-            <div key={s.sector} className="flex items-center justify-between p-2 rounded bg-[#FAF9F5] border border-[#E8E6DC]">
+            <div
+              key={s.sector}
+              className="flex items-center justify-between p-2 rounded bg-[#FAF9F5] border border-[#E8E6DC]"
+            >
               <div className="flex items-center gap-2 truncate">
-                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }}></span>
+                <span
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: s.color }}
+                ></span>
                 <span className="text-[#141413] truncate font-medium">{s.sector}</span>
               </div>
               <span className="font-semibold text-[#1B365D] shrink-0 ml-2">
