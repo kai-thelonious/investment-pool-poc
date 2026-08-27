@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import AdminView from '../components/admin/AdminView';
-import { PortfolioItem, TransactionItem, UserItem } from '../data/mockData';
+import { PortfolioItem, TransactionItem, DividendItem, UserItem } from '../data/mockData';
 
 interface AdminPageProps {
   portfolio: PortfolioItem[];
@@ -20,6 +20,7 @@ interface AdminPageProps {
   setDividendYieldInput: (value: string) => void;
   handleDeclareDividend: (e: FormEvent) => void;
   transactions: TransactionItem[];
+  dividends: DividendItem[];
   fundTotal: number;
 }
 
@@ -41,6 +42,7 @@ export default function AdminPage({
   setDividendYieldInput,
   handleDeclareDividend,
   transactions,
+  dividends,
   fundTotal,
 }: AdminPageProps) {
   return (
@@ -62,6 +64,7 @@ export default function AdminPage({
       setDividendYieldInput={setDividendYieldInput}
       handleDeclareDividend={handleDeclareDividend}
       transactions={transactions}
+      dividends={dividends}
       fundTotal={fundTotal}
     />
   );

@@ -5,12 +5,14 @@ import DepositForm from './DepositForm';
 import DividendsTab from './DividendsTab';
 import SectorExposureChart from '../analytics/SectorExposureChart';
 import RiskReturnScatterChart from '../analytics/RiskReturnScatterChart';
+import PEMetricsBar from '../PEMetricsBar';
 import {
   FundHistoryItem,
   UserItem,
   DividendItem,
   SectorExposureItem,
   RiskReturnItem,
+  TransactionItem,
 } from '../../data/mockData';
 
 interface InvestorViewProps {
@@ -20,6 +22,8 @@ interface InvestorViewProps {
   dividends: DividendItem[];
   sectors: SectorExposureItem[];
   riskData: RiskReturnItem[];
+  transactions: TransactionItem[];
+  fundTotal: number;
   depositInput: string;
   setDepositInput: (val: string) => void;
   handleUserDeposit: (e: FormEvent) => void;
@@ -32,6 +36,8 @@ export default function InvestorView({
   dividends,
   sectors,
   riskData,
+  transactions,
+  fundTotal,
   depositInput,
   setDepositInput,
   handleUserDeposit,
@@ -39,7 +45,16 @@ export default function InvestorView({
   const [activeTab, setActiveTab] = useState<'chart' | 'dividends' | 'analytics'>('chart');
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 sm:space-y-8">
+      {/* PRO-RATA INVESTOR PE/VC METRICS BAR */}
+      <PEMetricsBar
+        fundNAV={fundTotal}
+        transactions={transactions}
+        dividends={dividends}
+        sharePercent={currentUserSharePercent}
+        title={`${currentUser.name}'s Pro-Rata Stake Metrics (TVPI / DPI / MOIC / Net IRR)`}
+      />
+
       {/* Sub-tab switcher for Investor View */}
       <div className="flex items-center gap-2 border-b border-[#E8E6DC] pb-3 font-sans overflow-x-auto">
         <button

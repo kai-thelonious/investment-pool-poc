@@ -2,7 +2,8 @@ import { FormEvent } from 'react';
 import AssetBreakdownChart from './AssetBreakdownChart';
 import LPCapitalDistributionChart from './LPCapitalDistributionChart';
 import AdminControls from './AdminControls';
-import { PortfolioItem, TransactionItem, UserItem } from '../../data/mockData';
+import PEMetricsBar from '../PEMetricsBar';
+import { PortfolioItem, TransactionItem, DividendItem, UserItem } from '../../data/mockData';
 
 interface AdminViewProps {
   portfolio: PortfolioItem[];
@@ -22,6 +23,7 @@ interface AdminViewProps {
   setDividendYieldInput: (value: string) => void;
   handleDeclareDividend: (e: FormEvent) => void;
   transactions: TransactionItem[];
+  dividends: DividendItem[];
   fundTotal: number;
 }
 
@@ -43,36 +45,48 @@ export default function AdminView({
   setDividendYieldInput,
   handleDeclareDividend,
   transactions,
+  dividends,
   fundTotal,
 }: AdminViewProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
-      {/* Left Matrix Column: Visualizations Stack (Spans 2 Columns) */}
-      <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-        <AssetBreakdownChart portfolio={portfolio} />
-        <LPCapitalDistributionChart users={users} />
-      </div>
+    <div className="space-y-6 sm:space-y-8">
+      {/* INSTITUTIONAL PE/VC PERFORMANCE METRICS BAR */}
+      <PEMetricsBar
+        fundNAV={fundTotal}
+        transactions={transactions}
+        dividends={dividends}
+        sharePercent={100}
+        title="GP Portfolio Performance (TVPI / DPI / MOIC / Net IRR)"
+      />
 
-      {/* Right Column: General Partner Controls & Command Drawers (Spans 1 Column) */}
-      <div className="lg:col-span-1">
-        <AdminControls
-          totalPendingDeposits={totalPendingDeposits}
-          handleApproveDeposit={handleApproveDeposit}
-          handleApproveSingleTransaction={handleApproveSingleTransaction}
-          handleRejectSingleTransaction={handleRejectSingleTransaction}
-          newValuationInput={newValuationInput}
-          setNewValuationInput={setNewValuationInput}
-          handleUpdateFundValue={handleUpdateFundValue}
-          dividendAmountInput={dividendAmountInput}
-          setDividendAmountInput={setDividendAmountInput}
-          dividendQuarterInput={dividendQuarterInput}
-          setDividendQuarterInput={setDividendQuarterInput}
-          dividendYieldInput={dividendYieldInput}
-          setDividendYieldInput={setDividendYieldInput}
-          handleDeclareDividend={handleDeclareDividend}
-          transactions={transactions}
-          fundTotal={fundTotal}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+        {/* Left Matrix Column: Visualizations Stack (Spans 2 Columns) */}
+        <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+          <AssetBreakdownChart portfolio={portfolio} />
+          <LPCapitalDistributionChart users={users} />
+        </div>
+
+        {/* Right Column: General Partner Controls & Command Drawers (Spans 1 Column) */}
+        <div className="lg:col-span-1">
+          <AdminControls
+            totalPendingDeposits={totalPendingDeposits}
+            handleApproveDeposit={handleApproveDeposit}
+            handleApproveSingleTransaction={handleApproveSingleTransaction}
+            handleRejectSingleTransaction={handleRejectSingleTransaction}
+            newValuationInput={newValuationInput}
+            setNewValuationInput={setNewValuationInput}
+            handleUpdateFundValue={handleUpdateFundValue}
+            dividendAmountInput={dividendAmountInput}
+            setDividendAmountInput={setDividendAmountInput}
+            dividendQuarterInput={dividendQuarterInput}
+            setDividendQuarterInput={setDividendQuarterInput}
+            dividendYieldInput={dividendYieldInput}
+            setDividendYieldInput={setDividendYieldInput}
+            handleDeclareDividend={handleDeclareDividend}
+            transactions={transactions}
+            fundTotal={fundTotal}
+          />
+        </div>
       </div>
     </div>
   );

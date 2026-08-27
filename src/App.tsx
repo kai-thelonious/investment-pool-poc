@@ -88,6 +88,8 @@ export default function App() {
                         dividends={dividends}
                         sectors={sectors}
                         riskData={riskData}
+                        transactions={transactions}
+                        fundTotal={fundTotal}
                         depositInput={depositInput}
                         setDepositInput={setDepositInput}
                         handleUserDeposit={handleUserDeposit}
@@ -119,6 +121,7 @@ export default function App() {
                         setDividendYieldInput={setDividendYieldInput}
                         handleDeclareDividend={handleDeclareDividend}
                         transactions={transactions}
+                        dividends={dividends}
                         fundTotal={fundTotal}
                       />
                     </ProtectedRoute>
